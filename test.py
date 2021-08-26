@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 from cloudflare import Cloudflare, Worker, Storage
+from secret import API_TOKEN, ACCOUNT_ID
 
-API_TOKEN = ""
-ACCOUNT_ID = ""
 NAMESPACE = "todo"
 WORKER_NAME = "tester"
 
