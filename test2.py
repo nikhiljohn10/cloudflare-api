@@ -10,6 +10,10 @@ def main():
     store = cf.store.list()
     jsonPrint(workers, "Workers")
     jsonPrint(store,"Store")
+    id = cf.store.id("todo")
+    print(id)
+    if cf.store.create("my_kv"):
+        print("New namespace 'my_kv' is created")
 
 if __name__ == "__main__":
     main()

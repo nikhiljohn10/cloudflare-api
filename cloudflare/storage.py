@@ -9,21 +9,21 @@ class Storage:
         self.cf = cf
         self.base_url = f"{self.cf.base_url}/accounts/{self.cf.account_id}/storage/kv/namespaces"
 
-    def list(self):
-        nslist = self.cf.get(self.base_url)
-        return nslist
+    # def list(self):
+    #     nslist = self.cf.get(self.base_url)
+    #     return nslist
 
-    def id(self, title: str):
-        stores = self.list()
-        store_id = None
-        for store in stores:
-            if title.upper() == store["title"]:
-                store_id = store["id"]
-                break
-        if store_id is None:
-            raise NamespaceError("Namespace not found")
-        else:
-            return store_id
+    # def id(self, title: str):
+    #     stores = self.list()
+    #     store_id = None
+    #     for store in stores:
+    #         if title.upper() == store["title"]:
+    #             store_id = store["id"]
+    #             break
+    #     if store_id is None:
+    #         raise NamespaceError("Namespace not found")
+    #     else:
+    #         return store_id
 
     def create(self, title: str):
         title = title.upper()

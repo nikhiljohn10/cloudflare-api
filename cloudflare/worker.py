@@ -12,23 +12,23 @@ class Worker:
         self.cf = cf
         self.base_url = f"{self.cf.base_url}/accounts/{self.cf.account_id}/workers/scripts"
 
-    def list(self, detailed: bool = False) -> List:
-        workers = self.cf.get(self.base_url)
-        if detailed:
-            wlist = [
-                {
-                    worker["id"]: [
-                        {item["script"]: item["pattern"]} for item in worker["routes"]
-                    ]
-                }
-                if worker["routes"] is not None
-                else {worker["id"]: "No routes"}
-                for worker in workers
-            ]
-            wlist = sorted(wlist, key=lambda worker: worker.keys())
-        else:
-            wlist = [worker["id"] for worker in workers]
-        return wlist
+    # def list(self, detailed: bool = False) -> List:
+    #     workers = self.cf.get(self.base_url)
+    #     if detailed:
+    #         wlist = [
+    #             {
+    #                 worker["id"]: [
+    #                     {item["script"]: item["pattern"]} for item in worker["routes"]
+    #                 ]
+    #             }
+    #             if worker["routes"] is not None
+    #             else {worker["id"]: "No routes"}
+    #             for worker in workers
+    #         ]
+    #         wlist = sorted(wlist, key=lambda worker: worker.keys())
+    #     else:
+    #         wlist = [worker["id"] for worker in workers]
+    #     return wlist
 
     def download(self, name: str, directory: str = "./workers") -> None:
         data = self.cf.get(f"{self.base_url}/{name}")
