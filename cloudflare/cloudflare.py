@@ -74,7 +74,6 @@ class Cloudflare:
             params=params,
             headers=headers,
         )
-        response.raise_for_status()
         return self.get_result(response)
 
     def post(
@@ -96,7 +95,6 @@ class Cloudflare:
             json=json,
             headers=headers,
         )
-        response.raise_for_status()
         return self.get_result(response)
 
     def put(
@@ -123,7 +121,6 @@ class Cloudflare:
             files=files,
             headers=headers,
         )
-        response.raise_for_status()
         return self.get_result(response)
 
     def delete(self, url: str, params: Dict[str, str] = {}) -> Any:
@@ -132,5 +129,4 @@ class Cloudflare:
             params=params,
             headers=self.headers,
         )
-        response.raise_for_status()
         return self.get_result(response)
