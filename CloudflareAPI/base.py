@@ -2,6 +2,7 @@
 
 from typing import Optional
 
+
 class CFBase:
     def __init__(self) -> None:
         self.base_url = "https://api.cloudflare.com/client/v4"

@@ -35,6 +35,13 @@ class Storage(CFBase):
         result = self.req.post(url, json=dict(title=title))
         return result["title"] == title
 
+    def rename(self, old_title: str, new_title: str):
+        old_title = old_title.upper()
+        new_title = new_title.upper()
+        store_id = self.id(old_title)
+        url = self.build_url(store_id)
+        return self.req.put(url, json={"title": new_title})
+
     def delete(self, title: str):
         title = title.upper()
         store_id = self.id(title)
