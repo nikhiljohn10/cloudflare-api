@@ -9,11 +9,13 @@ def main():
     workers = cf.worker.list()
     store = cf.store.list()
     jsonPrint(workers, "Workers")
-    jsonPrint(store,"Store")
+    jsonPrint(store, "Store")
     id = cf.store.id("todo")
-    print(id)
+    print("ID: ", id)
     if cf.store.create("my_kv"):
         print("New namespace 'my_kv' is created")
+    if cf.store.delete("my_kv"):
+        print("The namespace 'my_kv' is deleted")
 
 if __name__ == "__main__":
     main()

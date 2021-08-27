@@ -12,7 +12,9 @@ class Storage(CFBase):
         self.base_path = f"/accounts/{account_id}/storage/kv/namespaces"
         super().__init__()
 
-    def list(self, detailed: bool = False, params: Optional[Dict[str, Any]] = None) -> Any:
+    def list(
+        self, detailed: bool = False, params: Optional[Dict[str, Any]] = None
+    ) -> Any:
         url = self.build_url()
         nslist: Any = self.req.get(url, params=params)
         if not detailed:
@@ -26,9 +28,15 @@ class Storage(CFBase):
             return stores[title]
         else:
             raise CFError("Namespace not found")
-    
+
     def create(self, title: str) -> bool:
         title = title.upper()
         url = self.build_url()
         result = self.req.post(url, json=dict(title=title))
         return result["title"] == title
+
+    def delete(self, title: str):
+        title = title.upper()
+        store_id = self.id(title)
+        url = self.build_url(store_id)
+        return self.req.delete(url)
