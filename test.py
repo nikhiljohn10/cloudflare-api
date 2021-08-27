@@ -29,7 +29,7 @@ def main():
         print("Worker script tester is uploaded to cloudflare")
 
     if cf.worker.download("tester"):
-        print(f"Worker script written in to tester.js")
+        print(f"Worker script tester is downloaded and written in to tester.js")
 
     if cf.worker.delete("tester"):
         print(f"Worker script tester is deleted from cloudflare")

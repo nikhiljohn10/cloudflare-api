@@ -19,30 +19,27 @@ class Request:
             self.session.close()
             self.session = None
 
-    def get_result(self, response: Response) -> Optional[Union[Dict[str, Any], bool]]:
-        try:
-            data = response.json()
-            keys = data.keys()
-        except JSONDecodeError:
-            return None
-        if response.ok:
-            if data["result"] is None:
-                return data["success"]
-            return data["result"]
-        else:
-            if "errors" in keys and data["errors"]:
-                raise APIError(data["errors"])
-            elif "error" in keys and data["error"]:
-                raise APIError(data["error"])
-            else:
-                raise CFError("Unkown error")
+    def get_result(self, response: Response) -> Union[Dict[str, Any], bool]:
+        data = response.json()
+        if data["result"] is None:
+            return data["success"]
+        return data["result"]
 
-    def parse(self, response: Response):
-        result = self.get_result(response)
-        if result is None:
+    def parse_error(self, response: Response) -> None:
+        data = response.json()
+        keys = data.keys()
+        if "errors" in keys and data["errors"]:
+            raise APIError(data["errors"])
+        elif "error" in keys and data["error"]:
+            raise APIError(data["error"])
+        raise CFError("Unkown error")
+
+    def parse(self, response: Response) -> Union[Dict[str, Any], str, bool]:
+        if not response.ok:
+            self.parse_error(response)
+        if "json" not in response.headers["content-type"]:
             return response.text
-        else:
-            return result
+        return self.get_result(response)
 
     def get(
         self,
