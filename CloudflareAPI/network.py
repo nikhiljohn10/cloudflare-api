@@ -114,7 +114,8 @@ class Request:
         headers: Optional[Any] = None,
     ):
         if json is not None:
-            _res = self.session.delete(url, params=params, json=json, headers=headers)
+            _res = self.session.delete(
+                url, params=params, json=json, headers=headers)
         else:
             if isinstance(data, (bytes, str)):
                 _res = self.session.delete(
