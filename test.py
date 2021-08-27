@@ -8,6 +8,9 @@ from secret import API_TOKEN, ACCOUNT_ID
 def main():
     cf = Cloudflare(token=API_TOKEN, account_id=ACCOUNT_ID)
 
+    accounts = cf.account.list()
+    jsonPrint(accounts, "Accounts")
+
     workers = cf.worker.list()
     jsonPrint(workers, "Workers")
 

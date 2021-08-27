@@ -62,6 +62,13 @@ poetry run python cloudflare-app
 
 ## Available endpoints
 
+### Accounts
+
+- [x] `list` - List all accounts where given token have access
+- [x] `get_id` - Return account id if only one account exists. Otherwise display all accounts availabe and exit.
+- [x] `details` - Display details of an account
+- [x] `rename` - Rename an existing account
+
 ### Worker Script
 
 - [x] `list` - List all existing workers
