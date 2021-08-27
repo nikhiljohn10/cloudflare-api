@@ -77,3 +77,7 @@ class Worker(CFBase):
                 ),
             }
             return self.req.put(url, files=miltipart_data)
+
+    def delete(self, name: str) -> None:
+        url = self.build_url(name)
+        return self.req.delete(url)
