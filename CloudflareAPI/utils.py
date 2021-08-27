@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 from json import dumps
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
 
 
-def jp(content: Dict[str, Any], title: Optional[str] = None) -> None:
+def jsonPrint(content: Optional[Union[Dict[str, Any], List[Any]]] = {}, title: Optional[str] = None) -> None:
     if title is not None:
         data = {title: content}
     else:

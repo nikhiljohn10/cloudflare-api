@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-from CloudflareAPI import Cloudflare
-from CloudflareAPI import jp
+from CloudflareAPI import Cloudflare, jsonPrint
 
 from secret import API_TOKEN, ACCOUNT_ID
 
 def main():
     cf = Cloudflare(token=API_TOKEN, account_id=ACCOUNT_ID)
     workers = cf.worker.list()
-    jp(workers)
+    store = cf.store.list()
+    jsonPrint(workers, "Workers")
+    jsonPrint(store,"Store")
 
 if __name__ == "__main__":
     main()
