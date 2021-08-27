@@ -24,6 +24,8 @@ def main():
     if cf.store.delete("my_new_kv"):
         print("The namespace 'my_new_kv' is deleted")
 
+    if cf.worker.download("tester"):
+        print(f"Worker script written in to tester.js")
 
 if __name__ == "__main__":
     main()

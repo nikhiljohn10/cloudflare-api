@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 from CloudflareAPI.base import CFBase
 from CloudflareAPI.network import Request
@@ -30,3 +31,11 @@ class Worker(CFBase):
         else:
             wlist = [worker["id"] for worker in workers]
         return wlist
+
+    def download(self, name: str, directory: str = "./workers") -> int:
+        url = self.build_url(name)
+        data = self.req.get(url)
+        directory = Path(directory)
+        directory.mkdir(parents=True, exist_ok=True)
+        file = directory / f"{name}.js"
+        return file.write_text(data)
