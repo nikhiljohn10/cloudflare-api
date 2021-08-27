@@ -17,4 +17,11 @@ upload-test:
 upload:
 	@twine upload dist/*
 
-.PHONY: install build check clean upload-test upload
+test-dep:
+	@python3 -m pip install --upgrade pip
+	@python3 -m pip install --upgrade requests
+
+test: test-dep
+	@python3 test.py
+
+.PHONY: install build check clean upload-test upload test test-dep
