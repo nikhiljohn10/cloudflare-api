@@ -30,48 +30,48 @@ class Worker:
     #         wlist = [worker["id"] for worker in workers]
     #     return wlist
 
-    def download(self, name: str, directory: str = "./workers") -> None:
-        data = self.cf.get(f"{self.base_url}/{name}")
-        pathlib.Path(directory).mkdir(parents=True, exist_ok=True)
-        with open(f"{directory}/{name}.js", "w") as fd:
-            fd.write(data)
-        print(f"Worker script written in to {directory}/{name}.js")
+    # def download(self, name: str, directory: str = "./workers") -> None:
+    #     data = self.cf.get(f"{self.base_url}/{name}")
+    #     pathlib.Path(directory).mkdir(parents=True, exist_ok=True)
+    #     with open(f"{directory}/{name}.js", "w") as fd:
+    #         fd.write(data)
+    #     print(f"Worker script written in to {directory}/{name}.js")
 
-    def upload(self, name: str, file: str, bindings: Optional[Union[List[Dict[str, str]], Dict[str, str]]] = None) -> None:
-        if bindings is None:
-            with open(file, 'r') as f:
-                data = f.read()
-            done = self.cf.put(f"{self.base_url}/{name}", data=data)
-        else:
-            bindings = [bindings] if isinstance(bindings, dict) else bindings
-            metadata = {
-                'body_part': 'script',
-                'bindings': [
-                    {
-                        'name': binding['name'].upper(),
-                        'type': 'kv_namespace',
-                        'namespace_id': binding['id']
-                    }
-                    for binding in bindings
-                ]
-            }
-            miltipart_data = {
-                'metadata': (
-                    None,
-                    json.dumps(metadata),
-                    'application/json'
-                ),
-                'script': (
-                    os.path.basename(file),
-                    open(file, 'rb'),
-                    'application/javascript'
-                )
-            }
-            done = self.cf.put(f"{self.base_url}/{name}", files=miltipart_data)
-        if done:
-            print(f"Worker script {name} is uploaded to cloudflare")
-        else:
-            print(f"Unkown error while uploading worker script {name}")
+    # def upload(self, name: str, file: str, bindings: Optional[Union[List[Dict[str, str]], Dict[str, str]]] = None) -> None:
+    #     if bindings is None:
+    #         with open(file, 'r') as f:
+    #             data = f.read()
+    #         done = self.cf.put(f"{self.base_url}/{name}", data=data)
+    #     else:
+    #         bindings = [bindings] if isinstance(bindings, dict) else bindings
+    #         metadata = {
+    #             'body_part': 'script',
+    #             'bindings': [
+    #                 {
+    #                     'name': binding['name'].upper(),
+    #                     'type': 'kv_namespace',
+    #                     'namespace_id': binding['id']
+    #                 }
+    #                 for binding in bindings
+    #             ]
+    #         }
+    #         miltipart_data = {
+    #             'metadata': (
+    #                 None,
+    #                 json.dumps(metadata),
+    #                 'application/json'
+    #             ),
+    #             'script': (
+    #                 os.path.basename(file),
+    #                 open(file, 'rb'),
+    #                 'application/javascript'
+    #             )
+    #         }
+    #         done = self.cf.put(f"{self.base_url}/{name}", files=miltipart_data)
+    #     if done:
+    #         print(f"Worker script {name} is uploaded to cloudflare")
+    #     else:
+    #         print(f"Unkown error while uploading worker script {name}")
 
     def delete(self, name: str) -> None:
         if self.cf.delete(f"{self.base_url}/{name}"):

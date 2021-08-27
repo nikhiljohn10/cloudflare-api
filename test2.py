@@ -9,9 +9,9 @@ def main():
     cf = Cloudflare(token=API_TOKEN, account_id=ACCOUNT_ID)
 
     workers = cf.worker.list()
-    store = cf.store.list()
-
     jsonPrint(workers, "Workers")
+
+    store = cf.store.list()
     jsonPrint(store, "Store")
 
     id = cf.store.id("todo")
@@ -26,6 +26,13 @@ def main():
 
     if cf.worker.download("tester"):
         print(f"Worker script written in to tester.js")
+    if cf.worker.upload(
+        name="tester2", file="test.js", bindings=dict(name="todo", id=id)
+    ):
+        print("Worker script tester is uploaded to cloudflare")
+    else:
+        print("Unkown error while uploading worker script tester")
+
 
 if __name__ == "__main__":
     main()
