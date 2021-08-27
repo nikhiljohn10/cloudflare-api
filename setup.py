@@ -4,30 +4,27 @@ import re
 from pathlib import Path
 from setuptools import setup, find_packages
 
-_version_re = re.compile(r"__version__\s=\s'(.*)'")
-
+_version_re = re.compile(r"__version__\s=\s\"(.*)\"")
 
 def main():
 
-    cd = Path(".")
-    readme = cd / "README.md"
-    readme.resolve(strict=True)
-    long_description = readme.read_text()
-    version_file = cd / "CloudflareAPI/__init__.py"
-    version_file.resolve(strict=True)
-    version = _version_re.search(version_file.read_text()).group(1)
+    HERE = Path(__file__).parent
+    README = (HERE / "README.md").read_text()
+    version_file = HERE / "CloudflareAPI/__init__.py"
+    version_file = version_file.resolve(strict=True).read_text()
+    version = _version_re.search(version_file).group(1)
 
     setup(
         name='cloudflare-api',
         version=version,
         description='Python wrapper for the Cloudflare v4 API',
-        long_description=long_description,
+        long_description=README,
+        long_description_content_type="text/markdown",
         author='Nikhil John',
         author_email='nikhiljohn1010@gmail.com',
         url='https://github.com/nikhiljohn10/pycf',
         license='MIT',
         packages=find_packages(),
-        include_package_data=True,
         install_requires=['requests'],
         keywords='cloudflare-api',
         classifiers=[
