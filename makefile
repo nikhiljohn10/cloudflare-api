@@ -1,20 +1,19 @@
-
 install:
 	@pip install -Ur requirement.txt
 
 build: clean install
 	@python3 setup.py sdist bdist_wheel
 
-check: build
+check: 
 	@twine check dist/*
 
 clean:
 	@rm -rf dist/ workers/ build/
 
-upload-test:
-	@twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+upload-test: build check
+	@twine upload -r testpypi dist/*
 
-upload:
+upload: build check
 	@twine upload dist/*
 
 test-dep:

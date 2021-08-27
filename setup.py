@@ -6,6 +6,7 @@ from setuptools import setup, find_packages
 
 _version_re = re.compile(r"__version__\s=\s\"(.*)\"")
 
+
 def main():
 
     HERE = Path(__file__).parent
@@ -17,12 +18,12 @@ def main():
     setup(
         name='cloudflare-api',
         version=version,
-        description='Python wrapper for the Cloudflare v4 API',
+        description='Python client for the Cloudflare v4 API',
         long_description=README,
         long_description_content_type="text/markdown",
         author='Nikhil John',
         author_email='nikhiljohn1010@gmail.com',
-        url='https://github.com/nikhiljohn10/pycf',
+        url='https://github.com/nikhiljohn10/cloudflare-api',
         license='MIT',
         packages=find_packages(),
         install_requires=['requests'],
