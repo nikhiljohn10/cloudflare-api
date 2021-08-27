@@ -8,8 +8,9 @@ class CFBase:
         self.base_url = "https://api.cloudflare.com/client/v4"
 
     def build_url(self, path: Optional[str] = None) -> str:
+        base_path = "" if not hasattr(self, "base_path") else self.base_path
         if path is None:
-            return f"{self.base_url}{self.base_path}"
+            return f"{self.base_url}{base_path}"
         if path.startswith("/"):
-            return f"{self.base_url}{self.base_path}{path}"
-        return f"{self.base_url}{self.base_path}/{path}"
+            return f"{self.base_url}{base_path}{path}"
+        return f"{self.base_url}{base_path}/{path}"

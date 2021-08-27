@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from json.decoder import JSONDecodeError
 import requests
 from typing import Any, Dict, Optional, Union
 
 from requests.models import Response
+from CloudflareAPI.base import CFBase
 from CloudflareAPI.exceptions import CFError, APIError
 
 
@@ -12,7 +12,12 @@ class Request:
     def __init__(self, base: str, token: str) -> None:
         self.base_url = base
         self.session = requests.Session()
+        if not token:
+            raise CFError("Invalid api token")
         self.session.headers.update({"Authorization": f"Bearer {token}"})
+        url = CFBase().build_url("user/tokens/verify")
+        if self.get(url)["status"] != "active":
+            raise CFError("Invalid api token")
 
     def __del__(self):
         if self.session:

@@ -15,7 +15,7 @@ class Cloudflare(CFBase):
         self.base_url = "https://api.cloudflare.com/client/v4"
         self.req = Request(base=self.base_url, token=self.__token)
         self.account = Account(request=self.req)
-        if self.__id is None:
+        if not self.__id or self.__id is None:
             self.__id = self.account.get_id()
         self.worker = Worker(request=self.req, account_id=self.__id)
         self.store = Storage(request=self.req, account_id=self.__id)
