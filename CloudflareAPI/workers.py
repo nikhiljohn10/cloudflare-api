@@ -54,29 +54,28 @@ class Worker(CFBase):
         if bindings is None:
             data = file.read_text()
             return self.cf.put(url, data=data)
-        else:
-            if not isinstance(bindings, list):
-                bindings = [bindings]
-            metadata = {
-                "body_part": "script",
-                "bindings": [
-                    {
-                        "name": binding["name"].upper(),
-                        "type": "kv_namespace",
-                        "namespace_id": binding["id"],
-                    }
-                    for binding in bindings
-                ],
-            }
-            miltipart_data = {
-                "metadata": (None, json.dumps(metadata), "application/json"),
-                "script": (
-                    file.name,
-                    file.open("rb"),
-                    "application/javascript",
-                ),
-            }
-            return self.req.put(url, files=miltipart_data)
+        if not isinstance(bindings, list):
+            bindings = [bindings]
+        metadata = {
+            "body_part": "script",
+            "bindings": [
+                {
+                    "name": binding["name"].upper(),
+                    "type": "kv_namespace",
+                    "namespace_id": binding["id"],
+                }
+                for binding in bindings
+            ],
+        }
+        miltipart_data = {
+            "metadata": (None, json.dumps(metadata), "application/json"),
+            "script": (
+                file.name,
+                file.open("rb"),
+                "application/javascript",
+            ),
+        }
+        return self.req.put(url, files=miltipart_data)
 
     def delete(self, name: str) -> None:
         url = self.build_url(name)

@@ -28,10 +28,11 @@ class Request:
     def parse_error(self, response: Response) -> None:
         data = response.json()
         keys = data.keys()
-        if "errors" in keys and data["errors"]:
-            raise APIError(data["errors"])
-        elif "error" in keys and data["error"]:
-            raise APIError(data["error"])
+        if "error" in keys or "errors" in keys:
+            if data["errors"]:
+                raise APIError(data["errors"])
+            if data["error"]:
+                raise APIError(data["error"])
         raise CFError("Unkown error")
 
     def parse(self, response: Response) -> Union[Dict[str, Any], str, bool]:
@@ -65,7 +66,7 @@ class Request:
                 url, params=params, json=json, headers=headers, files=files
             )
         else:
-            if isinstance(data, str) or isinstance(data, bytes):
+            if isinstance(data, (bytes, str)):
                 _res = self.session.post(
                     url, params=params, data=data, headers=headers, files=files
                 )
@@ -89,7 +90,7 @@ class Request:
                 url, params=params, json=json, headers=headers, files=files
             )
         else:
-            if isinstance(data, str) or isinstance(data, bytes):
+            if isinstance(data, (bytes, str)):
                 _res = self.session.put(
                     url, params=params, data=data, headers=headers, files=files
                 )
@@ -110,7 +111,7 @@ class Request:
         if json is not None:
             _res = self.session.delete(url, params=params, json=json, headers=headers)
         else:
-            if isinstance(data, str) or isinstance(data, bytes):
+            if isinstance(data, (bytes, str)):
                 _res = self.session.delete(
                     url, params=params, data=data, headers=headers
                 )

@@ -26,8 +26,7 @@ class Storage(CFBase):
         title = title.upper()
         if title in stores:
             return stores[title]
-        else:
-            raise CFError("Namespace not found")
+        raise CFError("Namespace not found")
 
     def create(self, title: str) -> bool:
         title = title.upper()

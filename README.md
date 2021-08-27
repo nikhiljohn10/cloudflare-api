@@ -1,4 +1,9 @@
 # cloudflare-api
+
+[![Python Package](https://github.com/nikhiljohn10/cloudflare-api/actions/workflows/python-publish.yml/badge.svg)](https://github.com/nikhiljohn10/cloudflare-api/actions/workflows/python-publish.yml) ![PyPI - Status](https://img.shields.io/pypi/status/cloudflare-api) [![CodeFactor](https://www.codefactor.io/repository/github/nikhiljohn10/cloudflare-api/badge)](https://www.codefactor.io/repository/github/nikhiljohn10/cloudflare-api) [![GitHub license](https://img.shields.io/github/license/nikhiljohn10/cloudflare-api)](https://github.com/nikhiljohn10/cloudflare-api/blob/main/LICENSE)
+
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/nikhiljohn10/cloudflare-api)](https://github.com/nikhiljohn10/cloudflare-api/releases) [![PyPI](https://img.shields.io/pypi/v/cloudflare-api)](https://pypi.org/project/cloudflare-api) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cloudflare-api)
+
 Python client for Cloudflare API v4
 
 ## Usage

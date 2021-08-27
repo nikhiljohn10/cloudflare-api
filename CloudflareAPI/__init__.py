@@ -4,5 +4,5 @@ from __future__ import absolute_import
 from CloudflareAPI.cloudflare import Cloudflare
 from CloudflareAPI.utils import jsonPrint
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 __ALL__ = ["Cloudflare", "jsonPrint"]

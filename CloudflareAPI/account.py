@@ -20,7 +20,7 @@ class Account(CFBase):
         alist = self.list()
         if len(alist) == 1:
             return alist[0]["id"]
-        elif len(alist) > 1:
+        if len(alist) > 1:
             print("Please use one of the account id as parameter in Cloudflare class")
             print("Accounts: ")
             for account in self.list():
@@ -28,12 +28,12 @@ class Account(CFBase):
             exit()
         raise CFError("No account found")
 
-    def details(self, id: str):
-        url = self.build_url(id)
+    def details(self, aid: str):
+        url = self.build_url(aid)
         account = self.req.get(url)
         return account
 
-    def rename(self, id: str, name: str):
-        url = self.build_url(id)
+    def rename(self, aid: str, name: str):
+        url = self.build_url(aid)
         account = self.req.put(url, json=dict(name=name))
         return account
