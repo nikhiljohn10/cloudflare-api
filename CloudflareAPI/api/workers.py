@@ -47,7 +47,7 @@ class Worker(CFBase):
         name: str,
         file: str,
         bindings: Optional[Union[List[Dict[str, str]], Dict[str, str]]] = None,
-    ) -> None:
+    ) -> Any:
         file = Path(file)
         file.resolve(strict=True)
         url = self.build_url(name)
@@ -77,6 +77,10 @@ class Worker(CFBase):
         }
         return self.req.put(url, files=miltipart_data)
 
-    def delete(self, name: str) -> None:
+    def deploy(self, name: str, enabled: bool = True) -> bool:
+        url = self.build_url(f"{name}/subdomain")
+        return self.req.post(url, json={"enabled": enabled})
+
+    def delete(self, name: str) -> bool:
         url = self.build_url(name)
         return self.req.delete(url)

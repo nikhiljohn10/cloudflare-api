@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import requests
 from CloudflareAPI import Cloudflare, jsonPrint
 
 from secret import API_TOKEN, ACCOUNT_ID
@@ -30,6 +31,9 @@ def main():
         name="tester", file="test.js", bindings=dict(name="my_new_kv", id=ns_id)
     ):
         print("Worker script tester is uploaded to cloudflare")
+
+    if cf.worker.deploy(name="tester"):
+        print("Worker script tester is deployed to cloudflare subdomain")
 
     if cf.worker.download("tester"):
         print(f"Worker script tester is downloaded and written in to tester.js")

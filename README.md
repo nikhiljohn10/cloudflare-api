@@ -67,22 +67,23 @@ poetry run python cloudflare-app
 
 ### Accounts
 
-- [x] `list` - List all accounts where given token have access
-- [x] `get_id` - Return account id if only one account exists. Otherwise display all accounts availabe and exit.
-- [x] `details` - Display details of an account
-- [x] `rename` - Rename an existing account
+- `list` - List all accounts where given token have access
+- `get_id` - Return account id if only one account exists. Otherwise display all accounts availabe and exit.
+- `details` - Display details of an account
+- `rename` - Rename an existing account
 
 ### Worker Script
 
-- [x] `list` - List all existing workers
-- [x] `upload` - Upload a new worker with binding if given
-- [x] `download` - Download an existing worker
-- [x] `delete` - Delete an existing worker
+- `list` - List all existing workers
+- `upload` - Upload a new worker with binding if given
+- `download` - Download an existing worker
+- `deploy` - Deploy an existing worker using the subdomain
+- `delete` - Delete an existing worker
 
 ### Workers KV
 
-- [x] `list` - List all existing Namespaces
-- [x] `id` - Find the namespace id of the namespace
-- [x] `create` - Create a new namespace
-- [x] `rename` - Rename an existing namespace
-- [x] `delete` - Delete an existing namespace
+- `list` - List all existing Namespaces
+- `id` - Find the namespace id of the namespace
+- `create` - Create a new namespace
+- `rename` - Rename an existing namespace
+- `delete` - Delete an existing namespace
