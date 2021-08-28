@@ -6,8 +6,8 @@ check:
 	@twine check dist/*
 
 pip-install:
-	@python3 -m pip install --upgrade pip > /dev/null
-	@pip3 install setuptools wheel
+	@python3 -m pip install --upgrade pip > /dev/null 2>&1
+	@pip3 install setuptools wheel > /dev/null 2>&1
 
 install: pip-install
 	@pip3 install -Ur requirement.txt
@@ -21,8 +21,8 @@ publish-test: check
 publish: check
 	@twine upload dist/*
 
-test-dep:
-	@python3 -m pip install --upgrade requests > /dev/null
+test-dep: pip-install
+	@python3 -m pip install --upgrade requests > /dev/null 2>&1
 
 test: test-dep
 	@python3 test.py

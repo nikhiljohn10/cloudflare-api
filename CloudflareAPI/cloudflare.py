@@ -3,9 +3,7 @@
 from typing import Optional
 from CloudflareAPI.base import CFBase
 from CloudflareAPI.network import Request
-from CloudflareAPI.workers import Worker
-from CloudflareAPI.storage import Storage
-from CloudflareAPI.account import Account
+from CloudflareAPI.api import Account, Worker, Storage
 
 
 class Cloudflare(CFBase):

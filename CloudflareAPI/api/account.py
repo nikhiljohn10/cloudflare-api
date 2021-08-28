@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Any, Dict, Optional
 from CloudflareAPI.base import CFBase
 from CloudflareAPI.network import Request
 from CloudflareAPI.exceptions import CFError
@@ -11,9 +12,13 @@ class Account(CFBase):
         self.base_path = "/accounts"
         super().__init__()
 
-    def list(self):
+    def list(
+        self, detailed: bool = False, params: Optional[Dict[str, Any]] = None
+    ) -> Any:
         url = self.build_url()
         accounts = self.req.get(url)
+        if not detailed:
+            accounts = {account["name"]: account["id"] for account in accounts}
         return accounts
 
     def get_id(self) -> str:
