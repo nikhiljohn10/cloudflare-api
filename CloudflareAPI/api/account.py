@@ -33,12 +33,13 @@ class Account(CFBase):
             exit()
         raise CFError("No account found")
 
-    def details(self, aid: str):
-        url = self.build_url(aid)
+    def details(self, account_id: str):
+        url = self.build_url(account_id)
         account = self.req.get(url)
         return account
 
-    def rename(self, aid: str, name: str):
-        url = self.build_url(aid)
+    # This method is not accessable due to default token permissions
+    def rename(self, account_id: str, name: str):
+        url = self.build_url(account_id)
         account = self.req.put(url, json=dict(name=name))
         return account

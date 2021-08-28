@@ -9,11 +9,11 @@ from CloudflareAPI.api import Account, Worker, Storage
 class Cloudflare(CFBase):
     def __init__(self, token: str, account_id: Optional[str] = None) -> None:
         self.__token = token
-        self.__id = account_id
+        self.account_id = account_id
         self.base_url = "https://api.cloudflare.com/client/v4"
         self.req = Request(base=self.base_url, token=self.__token)
         self.account = Account(request=self.req)
-        if not self.__id or self.__id is None:
-            self.__id = self.account.get_id()
-        self.worker = Worker(request=self.req, account_id=self.__id)
-        self.store = Storage(request=self.req, account_id=self.__id)
+        if not self.account_id or self.account_id is None:
+            self.account_id = self.account.get_id()
+        self.worker = Worker(request=self.req, account_id=self.account_id)
+        self.store = Storage(request=self.req, account_id=self.account_id)

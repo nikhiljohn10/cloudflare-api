@@ -21,7 +21,7 @@ class Storage(CFBase):
             nslist = {ns["title"]: ns["id"] for ns in nslist}
         return nslist
 
-    def id(self, title: str):
+    def get_id(self, title: str):
         stores = self.list()
         title = title.upper()
         if title in stores:
