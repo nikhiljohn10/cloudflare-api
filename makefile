@@ -44,7 +44,7 @@ else
 	@echo "Bumpping version from $(CURRENT_VERSION) to $(VERSION)"
 	@git add .
 	@git commit -m "bump version to v$(VERSION)"
-	@git tag -a "v$(VERSION)" HEAD -m "Test release of v$(VERSION)"
+	@git tag -a "v$(VERSION)" HEAD -m "cloudflare-api v$(VERSION)"
 	@git push --follow-tags
 endif
 
