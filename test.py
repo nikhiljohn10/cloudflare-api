@@ -36,7 +36,7 @@ def main():
 
     # Store.rename
     if cf.store.rename("my_kv", "my_new_kv"):
-        print("New namespace my_kv is renamed to 'my_new_kv'")
+        print("New namespace my_kv is renamed to my_new_kv")
 
     ns_id = cf.store.get_id("my_new_kv")
     print("Namespace ID: ", ns_id)

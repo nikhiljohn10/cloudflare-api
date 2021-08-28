@@ -31,7 +31,7 @@ cd cloudflare-api
 7. Create Token
 8. Copy the token and save it somewhere secret & secure.
 
-Create a `secret.py` in the root directory with following content and replace `API_TOKEN` with the token obtained from Cloudflare Dashboard:
+Create a `secret.py` in the root directory with following content and replace `API_TOKEN`'s value with the token obtained from Cloudflare Dashboard:
 ```python
 API_TOKEN = "API_TOKEN"
 ```
