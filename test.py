@@ -24,6 +24,9 @@ def main():
     details = cf.account.details(account_id)
     jsonPrint(details, "Account Details:")
 
+    # User.details
+    jsonPrint(cf.user.details(), "User Details:")
+
     # Worker.list
     workers = cf.worker.list()
     jsonPrint(workers, "Workers")

@@ -2,7 +2,7 @@
 
 from typing import Optional
 from CloudflareAPI.core import CFBase, Request
-from CloudflareAPI.api import Account, Worker, Storage
+from CloudflareAPI.api import Account, Worker, Storage, User
 
 
 class Cloudflare(CFBase):
@@ -14,5 +14,6 @@ class Cloudflare(CFBase):
         self.account = Account(request=self.req)
         if not self.account_id or self.account_id is None:
             self.account_id = self.account.get_id()
+        self.user = User(request=self.req, account_id=self.account_id)
         self.worker = Worker(request=self.req, account_id=self.account_id)
         self.store = Storage(request=self.req, account_id=self.account_id)

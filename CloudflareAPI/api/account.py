@@ -32,9 +32,11 @@ class Account(CFBase):
             exit()
         raise CFError("No account found")
 
-    def details(self, account_id: str):
+    def details(self, account_id: str, minimal: bool = True):
         url = self.build_url(account_id)
         account = self.req.get(url)
+        if minimal and "legacy_flags" in account.keys():
+            del account["legacy_flags"]
         return account
 
     # This method is not accessable due to default token permissions

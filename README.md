@@ -92,6 +92,10 @@ poetry run python cloudflare-app
 - `details` - Display details of an account
 - `rename`__*__ - Rename an existing account 
 
+### User
+
+- `details` - Display details of the account's user
+
 ### Worker
 
 - `list` - List all existing workers
