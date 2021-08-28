@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 from typing import Any, Dict, Optional
-from CloudflareAPI.base import CFBase
+from CloudflareAPI.core import CFBase, Request
 from CloudflareAPI.exceptions import CFError
-from CloudflareAPI.network import Request
 
 
 class Storage(CFBase):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import time
 import requests
 from CloudflareAPI import Cloudflare, jsonPrint
 
@@ -9,6 +10,7 @@ from secret import API_TOKEN
 def main():
     worker_name = "tester"
 
+    # Cloudflare
     cf = Cloudflare(token=API_TOKEN)
 
     # Account.list
@@ -38,6 +40,7 @@ def main():
     if cf.store.rename("my_kv", "my_new_kv"):
         print("New namespace my_kv is renamed to my_new_kv")
 
+    # Store.get_id
     ns_id = cf.store.get_id("my_new_kv")
     print("Namespace ID: ", ns_id)
 
@@ -69,7 +72,8 @@ def main():
 
     # Worker.undeploy
     if cf.worker.undeploy(worker_name):
-        print(f"Worker script {worker_name} is undeployed from cloudflare network")
+        print(
+            f"Worker script {worker_name} is undeployed from cloudflare network")
 
     # Worker.download
     if cf.worker.download(worker_name):

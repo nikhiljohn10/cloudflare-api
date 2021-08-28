@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 from setuptools import setup, find_packages
 
+
 def main():
 
     HERE = Path(__file__).parent

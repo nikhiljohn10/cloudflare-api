@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 from re import match
-from typing import Any, Dict, Optional
-from CloudflareAPI.base import CFBase
+from CloudflareAPI.core import CFBase, Request
 from CloudflareAPI.exceptions import CFError
-from CloudflareAPI.network import Request
 
 
 class Subdomain(CFBase):

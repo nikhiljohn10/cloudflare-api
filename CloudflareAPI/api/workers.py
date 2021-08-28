@@ -3,8 +3,7 @@
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
-from CloudflareAPI.base import CFBase
-from CloudflareAPI.network import Request
+from CloudflareAPI.core import CFBase, Request
 from CloudflareAPI.api.subdomain import Subdomain
 
 

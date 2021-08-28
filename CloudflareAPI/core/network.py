@@ -4,7 +4,7 @@ import requests
 from typing import Any, Dict, Optional, Union
 
 from requests.models import Response
-from CloudflareAPI.base import CFBase
+from CloudflareAPI.core.base import CFBase
 from CloudflareAPI.exceptions import CFError, APIError
 
 
@@ -18,6 +18,7 @@ class Request:
         url = CFBase().build_url("user/tokens/verify")
         if self.get(url)["status"] != "active":
             raise CFError("Invalid api token")
+        del url
 
     def __del__(self):
         if self.session:
