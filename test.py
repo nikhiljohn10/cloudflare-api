@@ -32,11 +32,11 @@ def main():
 
     # Store.create
     if cf.store.create("my_kv"):
-        print("New namespace 'my_kv' is created")
+        print("New namespace my_kv is created")
 
     # Store.rename
     if cf.store.rename("my_kv", "my_new_kv"):
-        print("New namespace 'my_kv' is renamed to 'my_new_kv'")
+        print("New namespace my_kv is renamed to 'my_new_kv'")
 
     ns_id = cf.store.get_id("my_new_kv")
     print("Namespace ID: ", ns_id)
@@ -81,7 +81,7 @@ def main():
 
     # Store.delete
     if cf.store.delete("my_new_kv"):
-        print("The namespace 'my_new_kv' is deleted")
+        print("The namespace my_new_kv is deleted")
 
 
 if __name__ == "__main__":
