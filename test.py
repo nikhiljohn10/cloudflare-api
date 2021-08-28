@@ -62,8 +62,10 @@ def main():
     # Response from deployed worker
     print(f"{worker_name.title()} URL:", url)
     response = requests.get(url)
-    if response.ok:
-        print("URL Response:", response.text)
+    while not response.ok:
+        response = requests.get(url)
+        time.sleep(1)
+    print("URL Response:", response.text)
 
     # Worker.undeploy
     if cf.worker.undeploy(worker_name):
