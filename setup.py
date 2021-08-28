@@ -4,16 +4,13 @@ import re
 from pathlib import Path
 from setuptools import setup, find_packages
 
-_version_re = re.compile(r"__version__\s=\s\"(.*)\"")
-
-
 def main():
 
     HERE = Path(__file__).parent
     README = (HERE / "README.md").read_text()
-    version_file = HERE / "CloudflareAPI/__init__.py"
+    version_file = HERE / "CloudflareAPI/__version__.py"
     version_file = version_file.resolve(strict=True).read_text()
-    version = _version_re.search(version_file).group(1)
+    version = re.compile(r"#v(.+)").search(version_file).group(1)
 
     setup(
         name='cloudflare-api',
