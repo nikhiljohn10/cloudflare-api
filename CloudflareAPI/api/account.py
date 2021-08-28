@@ -22,7 +22,7 @@ class Account(CFBase):
         return accounts
 
     def get_id(self) -> str:
-        alist = self.list()
+        alist = self.list(detailed=True)
         if len(alist) == 1:
             return alist[0]["id"]
         if len(alist) > 1:
