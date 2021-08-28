@@ -39,11 +39,13 @@ ifeq ($(VERSION),)
 else ifeq ($(VERSION),$(CURRENT_VERSION))
 	@echo "Error: You have given current version as input. Please try again."
 else
-	@echo "#v$(VERSION)" > $(VERSION_FILE)
 	@git checkout main
-	@echo $(VERSION)
-	@git tag $(VERSION)
-	@git push --tags
+	@echo "#v$(VERSION)" > $(VERSION_FILE)
+	@echo "Bumpping version from $(CURRENT_VERSION) to $(VERSION)"
+	@git add .
+	@git commit -m "bump version to v$(VERSION)"
+	@git tag -a "v$(VERSION)" HEAD -m "Test release of v$(VERSION)"
+	@git push --follow-tags
 endif
 
 .PHONY: install build pip-install check clean upload-test upload test test-dep version bump
