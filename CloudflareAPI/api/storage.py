@@ -21,28 +21,28 @@ class Storage(CFBase):
             nslist = {ns["title"]: ns["id"] for ns in nslist}
         return nslist
 
-    def get_id(self, title: str):
+    def get_id(self, namespace: str):
         stores = self.list()
-        title = title.upper()
-        if title in stores:
-            return stores[title]
+        namespace = namespace.upper()
+        if namespace in stores:
+            return stores[namespace]
         raise CFError("Namespace not found")
 
-    def create(self, title: str) -> bool:
-        title = title.upper()
+    def create(self, namespace: str) -> bool:
+        namespace = namespace.upper()
         url = self.build_url()
-        result = self.req.post(url, json=dict(title=title))
-        return result["title"] == title
+        result = self.req.post(url, json=dict(title=namespace))
+        return result["title"] == namespace
 
-    def rename(self, old_title: str, new_title: str):
-        old_title = old_title.upper()
-        new_title = new_title.upper()
-        store_id = self.id(old_title)
+    def rename(self, old_namespace: str, new_namespace: str):
+        old_namespace = old_namespace.upper()
+        new_namespace = new_namespace.upper()
+        store_id = self.get_id(old_namespace)
         url = self.build_url(store_id)
-        return self.req.put(url, json={"title": new_title})
+        return self.req.put(url, json={"title": new_namespace})
 
-    def delete(self, title: str):
-        title = title.upper()
-        store_id = self.id(title)
+    def delete(self, namespace: str):
+        namespace = namespace.upper()
+        store_id = self.get_id(namespace)
         url = self.build_url(store_id)
         return self.req.delete(url)
