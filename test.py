@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import secrets
 import requests
 from CloudflareAPI import Cloudflare, jsonPrint
 
@@ -7,6 +8,8 @@ from secret import API_TOKEN, ACCOUNT_ID
 
 
 def main():
+    worker_name = "tester"
+
     cf = Cloudflare(token=API_TOKEN, account_id=ACCOUNT_ID)
 
     accounts = cf.account.list()
@@ -28,18 +31,30 @@ def main():
     print("Namespace ID: ", ns_id)
 
     if cf.worker.upload(
-        name="tester", file="test.js", bindings=dict(name="my_new_kv", id=ns_id)
+        name=worker_name, file="test.js", bindings=dict(name="my_new_kv", id=ns_id)
     ):
-        print("Worker script tester is uploaded to cloudflare")
+        print(f"Worker script {worker_name} is uploaded to cloudflare")
 
-    if cf.worker.deploy(name="tester"):
-        print("Worker script tester is deployed to cloudflare subdomain")
+    if cf.worker.deploy(worker_name):
+        print(f"Worker script {worker_name} is deployed to cloudflare network")
 
-    if cf.worker.download("tester"):
-        print(f"Worker script tester is downloaded and written in to tester.js")
+    subdomain = cf.worker.subdomain.get()
+    url = f"https://{worker_name}.{subdomain}.workers.dev"
+    print(f"{worker_name.title()} URL:", url)
+    response = requests.get(url)
+    if response.ok:
+        print("URL Response:", response.text)
 
-    if cf.worker.delete("tester"):
-        print(f"Worker script tester is deleted from cloudflare")
+    if cf.worker.undeploy(worker_name):
+        print(f"Worker script {worker_name} is undeployed from cloudflare network")
+
+    if cf.worker.download(worker_name):
+        print(
+            f"Worker script {worker_name} is downloaded and written in to {worker_name}.js"
+        )
+
+    if cf.worker.delete(worker_name):
+        print(f"Worker script {worker_name} is deleted from cloudflare")
 
     if cf.store.delete("my_new_kv"):
         print("The namespace 'my_new_kv' is deleted")

@@ -65,22 +65,28 @@ poetry run python cloudflare-app
 
 ## Available endpoints
 
-### Accounts
+### Account
 
 - `list` - List all accounts where given token have access
 - `get_id` - Return account id if only one account exists. Otherwise display all accounts availabe and exit.
 - `details` - Display details of an account
 - `rename` - Rename an existing account
 
-### Worker Script
+### Worker
 
 - `list` - List all existing workers
 - `upload` - Upload a new worker with binding if given
 - `download` - Download an existing worker
 - `deploy` - Deploy an existing worker using the subdomain
+- `undeploy` - Undeploy an existing worker
 - `delete` - Delete an existing worker
 
-### Workers KV
+  ### Subdomain
+
+  - `create` - Create a new subdomain if none exists
+  - `get` - Get the current subdomain from cloudflare account
+
+### Store(Workers KV)
 
 - `list` - List all existing Namespaces
 - `id` - Find the namespace id of the namespace

@@ -5,12 +5,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from CloudflareAPI.base import CFBase
 from CloudflareAPI.network import Request
+from CloudflareAPI.api.subdomain import Subdomain
 
 
 class Worker(CFBase):
     def __init__(self, request: Request, account_id: str) -> None:
         self.req = request
         self.base_path = f"/accounts/{account_id}/workers/scripts"
+        self.subdomain = Subdomain(request, account_id)
         super().__init__()
 
     def list(
@@ -77,9 +79,13 @@ class Worker(CFBase):
         }
         return self.req.put(url, files=miltipart_data)
 
-    def deploy(self, name: str, enabled: bool = True) -> bool:
+    def deploy(self, name: str) -> bool:
         url = self.build_url(f"{name}/subdomain")
-        return self.req.post(url, json={"enabled": enabled})
+        return self.req.post(url, json={"enabled": True})
+
+    def undeploy(self, name: str) -> bool:
+        url = self.build_url(f"{name}/subdomain")
+        return self.req.post(url, json={"enabled": False})
 
     def delete(self, name: str) -> bool:
         url = self.build_url(name)
