@@ -19,6 +19,7 @@ jobs:
 
   publish:
     needs: "pre-release"
+    name: "PyPi Publish"
     runs-on: ubuntu-latest
 
     steps:
