@@ -33,9 +33,12 @@ test-dep: pip-install
 test: test-dep
 	@python3 test.py
 
-bump:
+test-git:
+	@ssh -T git@github.com || true
+
+bump: test-git
 ifeq ($(VERSION),)
-	@echo "Error: Require VERSION variable set."
+	@echo "Error: Require VERSION variable to be set."
 else ifeq ($(VERSION),$(CURRENT_VERSION))
 	@echo "Error: You have given current version as input. Please try again."
 else
@@ -48,4 +51,4 @@ else
 	@git push --follow-tags
 endif
 
-.PHONY: install build pip-install check clean upload-test upload test test-dep version bump
+.PHONY: install build pip-install check clean upload-test upload test test-dep version bump test-git
