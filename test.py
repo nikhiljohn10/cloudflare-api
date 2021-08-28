@@ -15,6 +15,13 @@ def main():
     accounts = cf.account.list()
     jsonPrint(accounts, "Accounts")
 
+    # Account.get_id
+    account_id = cf.account.get_id()
+
+    # Account.details
+    details = cf.account.details(account_id)
+    jsonPrint(details, "Account Details:")
+
     # Worker.list
     workers = cf.worker.list()
     jsonPrint(workers, "Workers")
