@@ -1,6 +1,6 @@
 clear
 
-TOKEN=$(cat secret.py | sed -e 's/API_TOKEN.*=.*"\(.*\)"/\1/')
+TOKEN=$(sed -e 's/API_TOKEN.*=.*"\(.*\)"/\1/' secret.py)
 ACCOUNT_ID=""
 BASE="https://api.cloudflare.com/client/v4"
 DATA=''
