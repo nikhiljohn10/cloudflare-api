@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "v*.*.*"
+      - "!v*.*.*-alpha*"
+      - "!v*.*.*-beta*"
 
 jobs:
   pre-release:
