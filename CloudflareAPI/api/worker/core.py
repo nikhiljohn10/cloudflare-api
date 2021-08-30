@@ -8,6 +8,30 @@ from CloudflareAPI.api.worker.subdomain import Subdomain
 
 
 class Worker(CFBase):
+    class Metadata:
+        def __init__(self) -> None:
+            self.data = dict(body_part="script", bindings=[])
+
+        def __call__(self):
+            return (None, json.dumps(self.data), "application/json")
+
+        def _sanitize(self, text: str):
+            return text.strip().replace(" ","_").upper()
+
+        def add_binding(self, name: str, namespace_id: str):
+            binding = dict(
+                name=self._sanitize(name), type="kv_namespace", namespace_id=namespace_id
+            )
+            self.data["bindings"].append(binding)
+
+        def add_variable(self, name: str, text: str):
+            binding = dict(name=self._sanitize(name), type="plain_text", text=text)
+            self.data["bindings"].append(binding)
+
+        def add_secret(self, name: str, secret: str):
+            binding = dict(name=self._sanitize(name), type="secret_text", text=secret)
+            self.data["bindings"].append(binding)
+
     def __init__(self, request: Request, account_id: str) -> None:
         self.req = request
         self.base_path = f"/accounts/{account_id}/workers/scripts"
@@ -47,29 +71,16 @@ class Worker(CFBase):
         self,
         name: str,
         file: str,
-        bindings: Optional[Union[List[Dict[str, str]], Dict[str, str]]] = None,
+        metadata: Optional[Metadata] = None
     ) -> Any:
         file = Path(file)
         file.resolve(strict=True)
         url = self.build_url(name)
-        if bindings is None:
+        if metadata is None:
             data = file.read_text()
             return self.cf.put(url, data=data)
-        if not isinstance(bindings, list):
-            bindings = [bindings]
-        metadata = {
-            "body_part": "script",
-            "bindings": [
-                {
-                    "name": binding["name"].upper(),
-                    "type": "kv_namespace",
-                    "namespace_id": binding["id"],
-                }
-                for binding in bindings
-            ],
-        }
         miltipart_data = {
-            "metadata": (None, json.dumps(metadata), "application/json"),
+            "metadata": metadata(),
             "script": (
                 file.name,
                 file.open("rb"),
