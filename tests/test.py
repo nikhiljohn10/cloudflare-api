@@ -70,7 +70,7 @@ def main():
     # Worker.Cron.get
     print(f"The worker {worker_name} cron list:")
     for cron in cf.worker.cron.get(worker_name):
-        print(f"    \"{cron['cron']}\",")
+        print(f"  - {cron['cron']}")
 
     # Worker.Subdomain.create
     # [ Raise error if subdomain exists for current account ]
