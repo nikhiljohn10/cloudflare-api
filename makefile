@@ -31,7 +31,7 @@ test-dep: pip-install
 	@python3 -m pip install --upgrade requests > /dev/null 2>&1
 
 test: test-dep
-	@python3 test.py
+	@python3 tests/test.py
 
 test-git:
 	@ssh -T git@github.com || true
@@ -42,7 +42,6 @@ ifeq ($(VERSION),)
 else ifeq ($(VERSION),$(CURRENT_VERSION))
 	@echo "Error: You have given current version as input. Please try again."
 else
-	@git checkout main
 	@echo "#v$(VERSION)" > $(VERSION_FILE)
 	@echo "Bumpping version from $(CURRENT_VERSION) to $(VERSION)"
 	@git add .
