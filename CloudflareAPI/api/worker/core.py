@@ -81,7 +81,7 @@ class Worker(CFBase):
         url = self.build_url(name)
         if metadata is None:
             data = file.read_text()
-            return self.req.put(url, data=data)
+            return self.req.put(url, data=data, headers={"Content-Type": "application/javascript"})
         miltipart_data = {
             "metadata": metadata(),
             "script": (
