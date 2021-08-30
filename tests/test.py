@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+
 sys.path.append(".")
 
 from CloudflareAPI import Cloudflare, jsonPrint, Fetch
@@ -8,13 +9,11 @@ from CloudflareAPI import Cloudflare, jsonPrint, Fetch
 from secret import API_TOKEN
 
 
-
-
 def main():
     worker_name = "testing"
 
     # Cloudflare
-    cf = Cloudflare(token=API_TOKEN)
+    cf = Cloudflare(API_TOKEN)
 
     # Account.list
     accounts = cf.account.list()
@@ -57,12 +56,22 @@ def main():
     metadata.add_secret("my_new_secret", "This is secret")
 
     # Worker.upload
-    if cf.worker.upload(name=worker_name, file="tests/test.js", metadata=metadata):
+    if cf.worker.upload(worker_name, "tests/test.js", metadata):
         print(f"Worker script {worker_name} is uploaded to cloudflare")
 
     # Worker.deploy
     if cf.worker.deploy(worker_name):
         print(f"Worker script {worker_name} is deployed to cloudflare network")
+
+    # Worker.Corn.update (Run corn script every 12 hour)
+    # ( Corn require ScheduledEvent )
+    # https://developers.cloudflare.com/workers/runtime-apis/scheduled-event
+    cf.worker.corn.update(worker_name, corns=list(dict(corn="* */12 * * *")))
+
+    # Worker.Corn.get
+    corn = cf.worker.corn.get(worker_name)
+    if corn:
+        print(f"The worker {worker_name} corn is", corn["cron"])
 
     # Worker.Subdomain.create
     # [ Raise error if subdomain exists for current account ]

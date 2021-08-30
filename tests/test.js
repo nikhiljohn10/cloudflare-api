@@ -6,6 +6,14 @@ addEventListener("fetch", (event) => {
   );
 });
 
+addEventListener("scheduled", event => {
+  event.waitUntil(handleScheduled(event));
+});
+
+async function handleScheduled(event) {
+  return new Response();
+}
+
 async function handleRequest(request) {
   const { pathname } = new URL(request.url);
 

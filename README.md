@@ -118,6 +118,11 @@ poetry run python cloudflare-app
   - `create` - Create a new subdomain if none exists
   - `get` - Get the current subdomain from cloudflare account
 
+  ### Corn
+
+  - `update` - Update an existing corn or create new corn for a worker
+  - `get` - Get the corn task list of specified worker
+
 ### Store(Workers KV)
 
 - `list` - List all existing Namespaces
