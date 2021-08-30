@@ -6,15 +6,6 @@ on:
       - "v*.*.*"
 
 jobs:
-  coverage:
-    name: "Code Coverage"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Upload coverage to Codecov"
-        uses: codecov/codecov-action@v2
-        with:
-          fail_ci_if_error: true
-
   pre-release:
     name: "Pre Release"
     runs-on: ubuntu-latest
