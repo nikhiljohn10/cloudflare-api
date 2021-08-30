@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 from CloudflareAPI.cloudflare import Cloudflare
-from CloudflareAPI.utils import jsonPrint
+from CloudflareAPI.utils import jsonPrint, Fetch
 
 
-__ALL__ = ["Cloudflare", "jsonPrint"]
+__ALL__ = ["Cloudflare", "jsonPrint", "Fetch"]
