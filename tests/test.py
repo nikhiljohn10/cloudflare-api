@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 
-import time
-import requests
-from CloudflareAPI import Cloudflare, jsonPrint
+import sys
+sys.path.append(".")
+
+from CloudflareAPI import Cloudflare, jsonPrint, Fetch
 
 from secret import API_TOKEN
 
 
+
+
 def main():
-    worker_name = "tester"
+    worker_name = "testing"
 
     # Cloudflare
     cf = Cloudflare(token=API_TOKEN)
@@ -47,10 +50,14 @@ def main():
     ns_id = cf.store.get_id("my_new_kv")
     print("Namespace ID: ", ns_id)
 
+    # Worker.Metadata
+    metadata = cf.worker.Metadata()
+    metadata.add_binding("my_new_kv", ns_id)
+    metadata.add_variable("my_new_var", "This is a new variable")
+    metadata.add_secret("my_new_secret", "This is secret")
+
     # Worker.upload
-    if cf.worker.upload(
-        name=worker_name, file="test.js", bindings=dict(name="my_new_kv", id=ns_id)
-    ):
+    if cf.worker.upload(name=worker_name, file="tests/test.js", metadata=metadata):
         print(f"Worker script {worker_name} is uploaded to cloudflare")
 
     # Worker.deploy
@@ -63,20 +70,28 @@ def main():
 
     # Worker.Subdomain.get
     subdomain = cf.worker.subdomain.get()
-    url = f"https://{worker_name}.{subdomain}.workers.dev"
 
     # Response from deployed worker
-    print(f"{worker_name.title()} URL:", url)
-    response = requests.get(url)
-    while not response.ok:
-        response = requests.get(url)
-        time.sleep(1)
-    print("URL Response:", response.text)
+    fetch = Fetch(f"https://{worker_name}.{subdomain}.workers.dev")
+
+    # Set key-value pair in the MY_NEW_KV Namespace
+    fetch("/set")
+
+    # Get key-value pair in the MY_NEW_KV Namespace
+    kv_response = fetch("/kv")
+    print("\rKV Response:", kv_response)
+
+    # Get environment variable from worker
+    var_response = fetch("/var")
+    print("\rVariable Response:", var_response)
+
+    # Get secret variable from worker
+    secret_response = fetch("/secret")
+    print("\rSecret Response:", secret_response)
 
     # Worker.undeploy
     if cf.worker.undeploy(worker_name):
-        print(
-            f"Worker script {worker_name} is undeployed from cloudflare network")
+        print(f"Worker script {worker_name} is undeployed from cloudflare network")
 
     # Worker.download
     if cf.worker.download(worker_name):
