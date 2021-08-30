@@ -17,7 +17,7 @@ jobs:
         uses: softprops/action-gh-release@v1
 
   publish:
-    needs: ["coverage", "pre-release"]
+    needs: "pre-release"
     name: "PyPi Publish"
     runs-on: ubuntu-latest
 
