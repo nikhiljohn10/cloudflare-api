@@ -63,6 +63,9 @@ def main():
   cf = Cloudflare(token="API_TOKEN")
   print(cf.worker.list())
   print(cf.store.list())
+
+if __name__ == "__main__":
+    main()
 ```
 Now replace `API_TOKEN` values with values obtained from Cloudflare dashboard. You can now run the program using following command:
 ```
@@ -100,6 +103,11 @@ poetry run python cloudflare-app
 
 - `list` - List all existing workers
 - `upload` - Upload a new worker with binding if given
+  - Upload file along as javascript
+  - Upload file along with metadata as multipart form-data
+    - KV Bindings
+    - Environment variables
+    - Secrets
 - `download` - Download an existing worker
 - `deploy` - Deploy an existing worker using the subdomain
 - `undeploy` - Undeploy an existing worker
@@ -119,3 +127,28 @@ poetry run python cloudflare-app
 - `delete` - Delete an existing namespace
 
 **( * : Not accessable with default Worker Token )**
+
+## Development
+
+### Version Bump
+
+To display current version:
+```
+make version
+```
+
+To bump to new version, where x.y.z is major,minor & patch versions respectively:
+```
+make VERSION=x.y.z bump
+```
+
+The above command does the following:
+
+1. Update version in `__version__.py` inside package
+2. Create a commit for the above change
+3. Tag the commit with VERSION
+4. Push the content in to main branch with tags
+5. Python publish workflow action activates
+6. Release the version pushed
+7. Build python package
+8. Publish python package in to pypi.org
