@@ -66,11 +66,10 @@ def main():
     # Worker.Corn.update (Run corn script every 12 hour)
     # ( Corn require ScheduledEvent )
     # https://developers.cloudflare.com/workers/runtime-apis/scheduled-event
-    cf.worker.corn.update(worker_name, corns=list(dict(corn="* */12 * * *")))
+    # cf.worker.corn.update(worker_name, corns=["* */12 * * *"])
 
     # Worker.Corn.get
-    corn = cf.worker.corn.get(worker_name)
-    if corn:
+    for corn in cf.worker.corn.get(worker_name):
         print(f"The worker {worker_name} corn is", corn["cron"])
 
     # Worker.Subdomain.create

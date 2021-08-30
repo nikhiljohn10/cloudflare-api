@@ -11,9 +11,11 @@ class Corn(CFBase):
         self.base_path = f"/accounts/{account_id}/workers/scripts"
         super().__init__()
 
-    def update(self, worker: str, corns: List[Dict[str, str]]) -> Any:
-        url = self.build_url(f"/{worker}/schedules")
-        return self.req.put(url, json=corns)
+    # (WIP: update)
+    # def update(self, worker: str, corns: List[str]) -> Any:
+    #     url = self.build_url(f"/{worker}/schedules")
+    #     corns = [{"corn": corn} for corn in corns]
+    #     return self.req.put(url, json=corns)
 
     def get(self, worker: str) -> Any:
         url = self.build_url(f"/{worker}/schedules")
