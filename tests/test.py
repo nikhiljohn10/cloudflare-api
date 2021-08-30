@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
-
 sys.path.append(".")
 
-from CloudflareAPI import Cloudflare, jsonPrint, Fetch
-
+from CloudflareAPI import Cloudflare, Fetch, jsonPrint
 from secret import API_TOKEN
 
 
@@ -63,14 +61,16 @@ def main():
     if cf.worker.deploy(worker_name):
         print(f"Worker script {worker_name} is deployed to cloudflare network")
 
-    # Worker.Corn.update (Run corn script every 12 hour)
-    # ( Corn require ScheduledEvent )
+    # Worker.Cron.update (Run cron script every 12 hour)
+    # ( Cron require ScheduledEvent )
     # https://developers.cloudflare.com/workers/runtime-apis/scheduled-event
-    # cf.worker.corn.update(worker_name, corns=["* */12 * * *"])
+    if cf.worker.cron.update(worker_name, crons=["* */12 * * 2-6", "* 2 * * 1"]):
+        print(f"Cron for worker {worker_name} is updated successfully")
 
-    # Worker.Corn.get
-    for corn in cf.worker.corn.get(worker_name):
-        print(f"The worker {worker_name} corn is", corn["cron"])
+    # Worker.Cron.get
+    print(f"The worker {worker_name} cron list:")
+    for cron in cf.worker.cron.get(worker_name):
+        print(f"    \"{cron['cron']}\",")
 
     # Worker.Subdomain.create
     # [ Raise error if subdomain exists for current account ]
@@ -99,7 +99,8 @@ def main():
 
     # Worker.undeploy
     if cf.worker.undeploy(worker_name):
-        print(f"Worker script {worker_name} is undeployed from cloudflare network")
+        print(
+            f"Worker script {worker_name} is undeployed from cloudflare network")
 
     # Worker.download
     if cf.worker.download(worker_name):

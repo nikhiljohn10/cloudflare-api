@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from CloudflareAPI.core import CFBase, Request
-from CloudflareAPI.api.worker.corn import Corn
+from CloudflareAPI.api.worker.cron import Cron
 from CloudflareAPI.api.worker.subdomain import Subdomain
 
 
@@ -37,7 +37,7 @@ class Worker(CFBase):
     def __init__(self, request: Request, account_id: str) -> None:
         self.req = request
         self.base_path = f"/accounts/{account_id}/workers/scripts"
-        self.corn = Corn(request, account_id)
+        self.cron = Cron(request, account_id)
         self.subdomain = Subdomain(request, account_id)
         super().__init__()
 

@@ -57,17 +57,20 @@ Copy the code below in to a new file `./cloudflare-app/__main__.py`.
 ```python
 #!/usr/bin/env python3
 
-from CloudflareAPI import Cloudflare, jsonPrint
+from CloudflareAPI import Cloudflare
 
 def main():
-  cf = Cloudflare(token="API_TOKEN")
+  cf = Cloudflare("API_TOKEN")
+
+  print(cf.account.list())
+  print(cf.user.details())
   print(cf.worker.list())
   print(cf.store.list())
 
 if __name__ == "__main__":
     main()
 ```
-Now replace `API_TOKEN` values with values obtained from Cloudflare dashboard. You can now run the program using following command:
+Now replace `API_TOKEN` values with values obtained from Cloudflare Dashboard. You can now run the program using following command:
 ```
 poetry run python cloudflare-app
 ```
@@ -118,10 +121,10 @@ poetry run python cloudflare-app
   - `create` - Create a new subdomain if none exists
   - `get` - Get the current subdomain from cloudflare account
 
-  ### Corn
+  ### Cron
 
-  - `update` - Update an existing corn or create new corn for a worker
-  - `get` - Get the corn task list of specified worker
+  - `update` - Update an existing cron or create new cron for a worker
+  - `get` - Get the cron task list of specified worker
 
 ### Store(Workers KV)
 
