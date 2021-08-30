@@ -2,8 +2,6 @@ name: Python Package
 
 on:
   push:
-    branches:
-      - main
     tags:
       - "v*.*.*"
 
@@ -13,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Upload coverage to Codecov"
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           fail_ci_if_error: true
 
