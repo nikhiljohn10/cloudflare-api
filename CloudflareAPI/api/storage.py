@@ -31,7 +31,9 @@ class Storage(CFBase):
         namespace = namespace.upper()
         url = self.build_url()
         result = self.req.post(url, json=dict(title=namespace))
-        return result["title"] == namespace
+        if result["title"] == namespace:
+            return result["id"]
+        raise CFError("Unable to create namespace")
 
     def rename(self, old_namespace: str, new_namespace: str):
         old_namespace = old_namespace.upper()
