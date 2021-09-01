@@ -14,7 +14,11 @@ def jsonPrint(
         data = {title: content}
     else:
         data = content
-    print(dumps(data, indent=2))
+    try:
+        print(dumps(data, indent=2))
+    except TypeError:
+        print(dumps(data, default=lambda o: o.dict(), sort_keys=True, indent=2))
+
 
 class Fetch:
     def __init__(self, url: str):

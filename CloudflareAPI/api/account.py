@@ -6,16 +6,14 @@ from CloudflareAPI.exceptions import CFError
 
 
 class Account(CFBase):
-    def __init__(self, request: Request) -> None:
-        self.req = request
+    def __init__(self) -> None:
         self.base_path = "/accounts"
-        super().__init__()
 
     def list(
         self, detailed: bool = False, params: Optional[Dict[str, Any]] = None
     ) -> Any:
         url = self.build_url()
-        accounts = self.req.get(url)
+        accounts = self.request.get(url)
         if not detailed:
             accounts = {account["name"]: account["id"] for account in accounts}
         return accounts
@@ -34,7 +32,7 @@ class Account(CFBase):
 
     def details(self, account_id: str, minimal: bool = True):
         url = self.build_url(account_id)
-        account = self.req.get(url)
+        account = self.request.get(url)
         if minimal and "legacy_flags" in account.keys():
             del account["legacy_flags"]
         return account
@@ -42,5 +40,5 @@ class Account(CFBase):
     # This method is not accessable due to default token permissions
     def rename(self, account_id: str, name: str):
         url = self.build_url(account_id)
-        account = self.req.put(url, json=dict(name=name))
+        account = self.request.put(url, json=dict(name=name))
         return account

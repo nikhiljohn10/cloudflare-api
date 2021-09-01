@@ -4,21 +4,19 @@ import requests
 from typing import Any, Dict, Optional, Union
 
 from requests.models import Response
-from CloudflareAPI.core.base import CFBase
 from CloudflareAPI.exceptions import CFError, APIError
 
 
 class Request:
-    def __init__(self, base: str, token: str) -> None:
-        self.base_url = base
+    def __init__(self, token: str) -> None:
+        self.base_url = "https://api.cloudflare.com/client/v4"
         self.session = requests.Session()
         if not token:
             raise CFError("Invalid api token")
         self.session.headers.update({"Authorization": f"Bearer {token}"})
-        url = CFBase().build_url("user/tokens/verify")
-        if self.get(url)["status"] != "active":
+        verification_url = f"{self.base_url}/user/tokens/verify"
+        if self.get(verification_url)["status"] != "active":
             raise CFError("Invalid api token")
-        del url
 
     def __del__(self):
         if self.session:
@@ -115,8 +113,7 @@ class Request:
         headers: Optional[Any] = None,
     ):
         if json is not None:
-            _res = self.session.delete(
-                url, params=params, json=json, headers=headers)
+            _res = self.session.delete(url, params=params, json=json, headers=headers)
         else:
             if isinstance(data, (bytes, str)):
                 _res = self.session.delete(

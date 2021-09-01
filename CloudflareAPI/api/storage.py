@@ -1,23 +1,74 @@
 #!/usr/bin/env python3
 
-from typing import Any, Dict, Optional
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Union
 from CloudflareAPI.core import CFBase, Request
 from CloudflareAPI.exceptions import CFError
 
 
-class Storage(CFBase):
-    def __init__(self, request: Request, account_id: str) -> None:
-        self.req = request
-        self.base_path = f"/accounts/{account_id}/storage/kv/namespaces"
-        super().__init__()
+@dataclass
+class Namespace(CFBase):
+    def __init__(self, id: str, title: str, supports_url_encoding: bool) -> None:
+        self.id = id
+        self.title = title
+        self.supports_url_encoding = supports_url_encoding
+        self.base_path = f"/accounts/{self.account_id}/storage/kv/namespaces/{self.id}/values/:key_name"
 
     def list(
-        self, detailed: bool = False, params: Optional[Dict[str, Any]] = None
+        self,
+        limit: int = 1000,
+        cursor: Optional[str] = None,
+        prefix: Optional[str] = None,
+    ) -> List[Dict[str, str]]:
+        ...
+
+    def read(self, key: str) -> str:
+        ...
+
+    def write(
+        self,
+        key: str,
+        value: str,
+        metadata: Dict[str, str],
+        expiration: str = 1578435000,
+        expiration_ttl: int = 300,
+    ) -> bool:
+        ...
+
+    def bulk_write(self, data: Dict[str, str]) -> bool:
+        ...
+
+    def delete(self, key: str) -> bool:
+        ...
+
+    def __str__(self) -> str:
+        return f"{self.title}: {self.id}"
+
+    def __repr__(self) -> str:
+        return "%r" % (self.__dict__)
+
+    def dict(self) -> Dict[str, str]:
+        return dict(
+            id=self.id,
+            title=self.title,
+            supports_url_encoding=self.supports_url_encoding,
+        )
+
+
+class Storage(CFBase):
+    def __init__(self) -> None:
+        self.base_path = f"/accounts/{self.account_id}/storage/kv/namespaces"
+
+    def list(
+        self,
+        params: Optional[List[Namespace]] = None,
     ) -> Any:
         url = self.build_url()
         nslist: Any = self.req.get(url, params=params)
-        if not detailed:
-            nslist = {ns["title"]: ns["id"] for ns in nslist}
+        nslist = [
+            Namespace(ns["id"], ns["title"], ns["supports_url_encoding"])
+            for ns in nslist
+        ]
         return nslist
 
     def get_id(self, namespace: str):
