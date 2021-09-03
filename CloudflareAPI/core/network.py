@@ -6,15 +6,20 @@ from typing import Any, Dict, Optional, Union
 from requests.models import Response
 from CloudflareAPI.exceptions import CFError, APIError
 
+CLOUDFLARE_API_ROOT_URI = "https://api.cloudflare.com/client/v4"
+
 
 class Request:
-    def __init__(self, token: str) -> None:
-        self.base_url = "https://api.cloudflare.com/client/v4"
-        self.session = requests.Session()
+    def __init__(self, token: str, path: str = "") -> None:
         if not token:
             raise CFError("Invalid api token")
+        path = self.__fix_path(path)
+        self.base_url = f"{CLOUDFLARE_API_ROOT_URI}{path}"
+        self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {token}"})
-        verification_url = f"{self.base_url}/user/tokens/verify"
+
+    def verify_token(self):
+        verification_url = f"{CLOUDFLARE_API_ROOT_URI}/user/tokens/verify"
         if self.get(verification_url)["status"] != "active":
             raise CFError("Invalid api token")
 
@@ -46,13 +51,24 @@ class Request:
             return response.text
         return self.get_result(response)
 
+    def __fix_path(self, path):
+        if not path.startswith("/"):
+            path = "/" + path
+        return path
+
+    def url(self, path: Optional[str] = None):
+        if path is None:
+            return self.base_url
+        return self.base_url + self.__fix_path(path)
+
     def get(
         self,
-        url: str,
+        url: Optional[str] = None,
         params: Optional[Any] = None,
         data: Optional[Any] = None,
         headers: Optional[Any] = None,
     ):
+        url = self.url() if url is None or not url else self.url(url)
         _res = self.session.get(url, params=params, data=data, headers=headers)
         return self.parse(_res)
 

@@ -131,3 +131,4 @@ dmypy.json
 secret.py
 .vscode/
 workers/
+cf.ini

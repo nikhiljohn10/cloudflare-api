@@ -17,7 +17,7 @@ def jsonPrint(
     try:
         print(dumps(data, indent=2))
     except TypeError:
-        print(dumps(data, default=lambda o: o.dict(), sort_keys=True, indent=2))
+        print(dumps(data, default=lambda o: o.__dict__, sort_keys=True, indent=2))
 
 
 class Fetch:

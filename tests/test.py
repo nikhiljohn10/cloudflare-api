@@ -14,8 +14,8 @@ def main():
     cf = Cloudflare(API_TOKEN)
 
     # # Account.list
-    # accounts = cf.account.list()
-    # jsonPrint(accounts, "Accounts")
+    accounts = cf.account.list()
+    jsonPrint(accounts, "Accounts")
 
     # # Account.get_id
     # account_id = cf.account.get_id()
@@ -32,8 +32,8 @@ def main():
     # jsonPrint(workers, "Workers")
 
     # Store.list
-    store = cf.store.list()
-    jsonPrint(store)
+    # store = cf.store.list()
+    # jsonPrint(store)
     # jsonPrint(store, "Store")
 
     # # Store.create

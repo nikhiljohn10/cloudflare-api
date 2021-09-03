@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from CloudflareAPI.core import CFBase, Request
+from CloudflareAPI.core import CFBase
 
 
 class User(CFBase):
