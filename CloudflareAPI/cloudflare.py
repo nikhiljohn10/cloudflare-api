@@ -7,7 +7,7 @@ from CloudflareAPI.api import Account, Worker, Storage, User
 
 class Cloudflare(CFBase):
     def __init__(
-        self, token: str, account_id: Optional[str] = None, bare: bool = False
+        self, bare: bool = False
     ) -> None:
         self.account = Account()
         # self.user = User()
