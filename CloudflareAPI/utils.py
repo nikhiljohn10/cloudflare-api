@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Union
 
 
 def jsonPrint(
-    content: Optional[Union[Dict[str, Any], List[Any]]] = {},
+    content: Any = {},
     title: Optional[str] = None,
 ) -> None:
     if title is not None:
@@ -17,7 +17,11 @@ def jsonPrint(
     try:
         print(dumps(data, indent=2))
     except TypeError:
-        print(dumps(data, default=lambda o: o.__dict__, sort_keys=True, indent=2))
+        print(data)
+        if "props" in data.keys():
+            print(dumps(data, default=lambda o: o.props(), sort_keys=True, indent=2))
+        else:
+            print(dumps(data, default=lambda o: o.__dict__, sort_keys=True, indent=2))
 
 
 class Fetch:

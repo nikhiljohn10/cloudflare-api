@@ -10,13 +10,13 @@ class Cloudflare(CFBase):
         self, bare: bool = False
     ) -> None:
         self.account = Account()
-        # self.user = User()
-        # if not bare:
-        #     self.worker = self.get_worker()
-        #     self.store = self.get_store()
+        self.user = User()
+        if not bare:
+            # self.worker = self.get_worker()
+            self.store = self.get_store()
 
     def get_worker(self):
-        return Worker()
+        return Worker(account_id=self.account.id)
 
     def get_store(self):
-        return Storage()
+        return Storage(account_id=self.account.id)

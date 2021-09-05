@@ -25,7 +25,7 @@ class Request:
             raise CFError("Invalid api token")
 
     def __del__(self):
-        if self.session:
+        if "session" in self.__dict__ and self.session:
             self.session.close()
             self.session = None
 
@@ -39,11 +39,10 @@ class Request:
         if not response.ok:
             data = response.json()
             keys = data.keys()
-            if "error" in keys or "errors" in keys:
-                if data["errors"]:
-                    raise APIError(data["errors"])
-                if data["error"]:
-                    raise APIError(data["error"])
+            if "errors" in keys and data["errors"]:
+                raise APIError(data["errors"])
+            elif "error" in keys and data["error"]:
+                raise APIError(data)
             raise CFError("Unkown error")
         if "json" not in response.headers["content-type"]:
             return response.text
@@ -73,6 +72,8 @@ class Request:
         _res = self.session.get(
             self.url(url), params=params, data=data, headers=headers
         )
+        # print(_res.url)
+        # print(_res.text)
         return self.parse(_res)
 
     def post(
@@ -86,16 +87,24 @@ class Request:
     ):
         if json is not None:
             _res = self.session.post(
-                url, params=params, json=json, headers=headers, files=files
+                self.url(url), params=params, json=json, headers=headers, files=files
             )
         else:
             if isinstance(data, (bytes, str)):
                 _res = self.session.post(
-                    url, params=params, data=data, headers=headers, files=files
+                    self.url(url),
+                    params=params,
+                    data=data,
+                    headers=headers,
+                    files=files,
                 )
             else:
                 _res = self.session.post(
-                    url, params=params, json=data, headers=headers, files=files
+                    self.url(url),
+                    params=params,
+                    json=data,
+                    headers=headers,
+                    files=files,
                 )
         return self.parse(_res)
 
@@ -110,16 +119,24 @@ class Request:
     ):
         if json is not None:
             _res = self.session.put(
-                url, params=params, json=json, headers=headers, files=files
+                self.url(url), params=params, json=json, headers=headers, files=files
             )
         else:
             if isinstance(data, (bytes, str)):
                 _res = self.session.put(
-                    url, params=params, data=data, headers=headers, files=files
+                    self.url(url),
+                    params=params,
+                    data=data,
+                    headers=headers,
+                    files=files,
                 )
             else:
                 _res = self.session.put(
-                    url, params=params, json=data, headers=headers, files=files
+                    self.url(url),
+                    params=params,
+                    json=data,
+                    headers=headers,
+                    files=files,
                 )
         return self.parse(_res)
 
@@ -132,14 +149,16 @@ class Request:
         headers: Optional[Any] = None,
     ):
         if json is not None:
-            _res = self.session.delete(url, params=params, json=json, headers=headers)
+            _res = self.session.delete(
+                self.url(url), params=params, json=json, headers=headers
+            )
         else:
             if isinstance(data, (bytes, str)):
                 _res = self.session.delete(
-                    url, params=params, data=data, headers=headers
+                    self.url(url), params=params, data=data, headers=headers
                 )
             else:
                 _res = self.session.delete(
-                    url, params=params, json=data, headers=headers
+                    self.url(url), params=params, json=data, headers=headers
                 )
         return self.parse(_res)

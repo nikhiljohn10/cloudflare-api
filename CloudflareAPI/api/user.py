@@ -5,11 +5,10 @@ from CloudflareAPI.core import CFBase
 
 class User(CFBase):
     def __init__(self) -> None:
-        self.base_path = f"/user"
+        self.request = self.get_request("user")
 
     def details(self, minimal: bool = True):
-        url = self.build_url()
-        data = self.request.get(url)
+        data = self.request.get()
         if minimal and "organizations" in data.keys():
             del data["organizations"]
         return data

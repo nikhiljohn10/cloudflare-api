@@ -4,24 +4,23 @@ import sys
 sys.path.append(".")
 
 from CloudflareAPI import Cloudflare, Fetch, jsonPrint
-from secret import API_TOKEN
-
 
 def main():
     worker_name = "testing"
 
     # Cloudflare
-    cf = Cloudflare(API_TOKEN)
+    cf = Cloudflare()
 
     # # Account.list
-    accounts = cf.account.list()
-    jsonPrint(accounts, "Accounts")
+    # accounts = cf.account.list()
+    # jsonPrint(accounts, "Accounts")
 
     # # Account.get_id
     # account_id = cf.account.get_id()
+    # print("Account ID: ", account_id)
 
     # # Account.details
-    # details = cf.account.details(account_id)
+    # details = cf.account.details()
     # jsonPrint(details, "Account Details:")
 
     # # User.details
@@ -32,9 +31,12 @@ def main():
     # jsonPrint(workers, "Workers")
 
     # Store.list
-    # store = cf.store.list()
-    # jsonPrint(store)
-    # jsonPrint(store, "Store")
+    store = cf.store.list()
+    print(store)
+    ns1 = cf.store.get_ns("114ee3e77f9b494ba5cf39095ecc683e")
+    print(ns1)
+    keys = ns1.list()
+    print(keys)
 
     # # Store.create
     # if cf.store.create("my_kv"):

@@ -1,26 +1,32 @@
 #!/usr/bin/env python3
 
-from typing import Any, List, Optional
+import json
+from typing import Any, Dict, List, Optional
 from CloudflareAPI.core import CFBase
 from CloudflareAPI.exceptions import CFError
 from CloudflareAPI.dataclass.namespace import Namespace
 
 
 class Storage(CFBase):
-    def __init__(self) -> None:
-        self.base_path = f"/accounts/{self.account_id}/storage/kv/namespaces"
+    def __init__(self, account_id: str) -> None:
+        self.account_id = account_id
+        base_path = f"/accounts/{self.account_id}/storage/kv/namespaces"
+        self.request = self.get_request(base_path)
 
     def list(
         self,
-        params: Optional[List[Namespace]] = None,
+        params: Optional[Dict[str, Any]] = None,
     ) -> Any:
-        url = self.build_url()
-        nslist: Any = self.req.get(url, params=params)
-        nslist = [
-            Namespace(ns["id"], ns["title"], ns["supports_url_encoding"])
-            for ns in nslist
-        ]
+        nslist = self.request.get(params=params)
+        nslist = [Namespace(self.account_id, ns) for ns in nslist]
         return nslist
+
+    def get_ns(self, id: str) -> Namespace:
+        nslist = self.list()
+        for ns in nslist:
+            if ns.id == id:
+                return ns
+        raise CFError("Invalid namespace id")
 
     def get_id(self, namespace: str):
         stores = self.list()
@@ -31,8 +37,7 @@ class Storage(CFBase):
 
     def create(self, namespace: str) -> bool:
         namespace = namespace.upper()
-        url = self.build_url()
-        result = self.req.post(url, json=dict(title=namespace))
+        result = self.request.post(json=dict(title=namespace))
         if result["title"] == namespace:
             return result["id"]
         raise CFError("Unable to create namespace")
@@ -41,11 +46,9 @@ class Storage(CFBase):
         old_namespace = old_namespace.upper()
         new_namespace = new_namespace.upper()
         store_id = self.get_id(old_namespace)
-        url = self.build_url(store_id)
-        return self.req.put(url, json={"title": new_namespace})
+        return self.request.put(store_id, json={"title": new_namespace})
 
     def delete(self, namespace: str):
         namespace = namespace.upper()
         store_id = self.get_id(namespace)
-        url = self.build_url(store_id)
-        return self.req.delete(url)
+        return self.request.delete(store_id)

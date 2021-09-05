@@ -12,7 +12,6 @@ class Account(CFBase):
         self.__list: Optional[List[AccountData]] = None
         self.request = self.get_request("accounts")
         self.id = self.get_id()
-        self.details()
 
     def __get_object(self, account: AccountData):
         return AccountData(
@@ -59,13 +58,11 @@ class Account(CFBase):
             exit()
         raise CFError("No account found")
 
-    def details(self):
-        data = self.request.get(self.id)
-        # url = self.build_url(account_id)
-        # account = self.request.get(url)
-        # if minimal and "legacy_flags" in account.keys():
-        #     del account["legacy_flags"]
-        # return account
+    def details(self, minimal: bool = True):
+        account = self.request.get(self.id)
+        if minimal and "legacy_flags" in account.keys():
+            del account["legacy_flags"]
+        return account
 
     # This method is not accessable due to default token permissions
     def rename(self, account_id: str, name: str):

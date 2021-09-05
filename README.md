@@ -4,6 +4,8 @@
 
 Python client for Cloudflare API v4
 
+> Require Python 3.9+
+
 ## Usage
 
 ### Python Package
