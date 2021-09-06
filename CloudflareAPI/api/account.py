@@ -39,6 +39,7 @@ class Account(CFBase):
         if order and (order != "asc" and order != "desc"):
             raise CFError("Invalid order parameter. Only 'asc' or 'desc' allowed.")
         params = {"page": page, "per_page": per_page, "order": order}
+        params = self.parse_params(params)
         data = self.request.get(params=params)
         self.__list = [self.__get_object(account) for account in data]
         return self.__list

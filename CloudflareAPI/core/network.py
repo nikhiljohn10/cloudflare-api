@@ -72,13 +72,11 @@ class Request:
         _res = self.session.get(
             self.url(url), params=params, data=data, headers=headers
         )
-        # print(_res.url)
-        # print(_res.text)
         return self.parse(_res)
 
     def post(
         self,
-        url: str,
+        url: Optional[str] = None,
         params: Optional[Any] = None,
         data: Optional[Any] = None,
         json: Optional[Any] = None,
@@ -110,7 +108,7 @@ class Request:
 
     def put(
         self,
-        url: str,
+        url: Optional[str] = None,
         params: Optional[Any] = None,
         data: Optional[Any] = None,
         json: Optional[Any] = None,
@@ -142,7 +140,7 @@ class Request:
 
     def delete(
         self,
-        url: str,
+        url: Optional[str] = None,
         params: Optional[Any] = None,
         data: Optional[Any] = None,
         json: Optional[Any] = None,

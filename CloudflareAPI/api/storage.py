@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 from typing import Any, Dict, List, Optional
 from CloudflareAPI.core import CFBase
 from CloudflareAPI.exceptions import CFError
@@ -17,22 +16,18 @@ class Storage(CFBase):
         self,
         params: Optional[Dict[str, Any]] = None,
     ) -> Any:
-        nslist = self.request.get(params=params)
-        nslist = [Namespace(self.account_id, ns) for ns in nslist]
-        return nslist
+        params = self.parse_params(params)
+        stores = self.request.get(params=params)
+        stores = [Namespace(self.account_id, ns) for ns in stores]
+        self._stores = stores
+        return stores
 
-    def get_ns(self, id: str) -> Namespace:
-        nslist = self.list()
-        for ns in nslist:
-            if ns.id == id:
-                return ns
-        raise CFError("Invalid namespace id")
-
-    def get_id(self, namespace: str):
+    def get_ns(self, namespace: str) -> Namespace:
         stores = self.list()
         namespace = namespace.upper()
-        if namespace in stores:
-            return stores[namespace]
+        for store in stores:
+            if namespace == store.title:
+                return store.id, store
         raise CFError("Namespace not found")
 
     def create(self, namespace: str) -> bool:
@@ -45,7 +40,7 @@ class Storage(CFBase):
     def rename(self, old_namespace: str, new_namespace: str):
         old_namespace = old_namespace.upper()
         new_namespace = new_namespace.upper()
-        store_id = self.get_id(old_namespace)
+        store_id, store = self.get_ns(old_namespace)
         return self.request.put(store_id, json={"title": new_namespace})
 
     def delete(self, namespace: str):

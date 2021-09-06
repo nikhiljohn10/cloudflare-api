@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
 
 import sys
+from time import sleep
+
 sys.path.append(".")
 
 from CloudflareAPI import Cloudflare, Fetch, jsonPrint
+
+
+def wait_result(func, *args, **kargs):
+    while True:
+        try:
+            result = func(*args, **kargs)
+            print(f"\r{result}")
+        except:
+            print("\rWaiting for result...", end="")
+            sleep(0.1)
+            continue
+        break
+
 
 def main():
     worker_name = "testing"
@@ -33,22 +48,46 @@ def main():
     # Store.list
     store = cf.store.list()
     print(store)
-    ns1 = cf.store.get_ns("114ee3e77f9b494ba5cf39095ecc683e")
-    print(ns1)
-    keys = ns1.list()
-    print(keys)
 
     # # Store.create
     # if cf.store.create("my_kv"):
     #     print("New namespace my_kv is created")
 
-    # # Store.rename
-    # if cf.store.rename("my_kv", "my_new_kv"):
-    #     print("New namespace my_kv is renamed to my_new_kv")
+    # Store.rename
+    if cf.store.rename("my_kv", "my_new_kv"):
+        print("New namespace my_kv is renamed to my_new_kv")
 
-    # # Store.get_id
-    # ns_id = cf.store.get_id("my_new_kv")
-    # print("Namespace ID: ", ns_id)
+    # Store.get_id
+    ns_id, ns1 = cf.store.get_ns("my_new_kv")
+
+    # print(ns1)
+    # keys = ns1.keys()
+    # print(keys)
+    # for key in keys:
+    #     print(ns1.read(key))
+    #     break
+    # if ns1.write("test", "this is a test value"):
+    #     wait_result(ns1.read, "test")
+
+    # nsmeta = ns1.Metadata("metaTest", "This is meta of test")
+    # if ns1.write("test2", "this is a test value 2", metadata=nsmeta):
+    #     wait_result(ns1.read, "test2")
+
+    # bundle = ns1.NSBundler()
+    # bundle.add("k1", "hello", metadata=nsmeta, expiration_ttl=200)
+    # bundle.add("k2", "d29ybGQ=", metadata=nsmeta, base64=True)
+    # if ns1.bulk_write(bundle=bundle):
+    #     wait_result(ns1.read, "k1")
+    #     wait_result(ns1.read, "k2")
+
+    # keys = ns1.keys()
+    # print(keys)
+
+    # if ns1.delete("test"):
+    #     print("Deteled test key from namespace")
+
+    # if ns1.bulk_delete(["test2", "k1", "k2"]):
+    #     print("Deteled test2, k1 & k2 key from namespace")
 
     # # Worker.Metadata
     # metadata = cf.worker.Metadata()
