@@ -46,12 +46,12 @@ def main():
     # jsonPrint(workers, "Workers")
 
     # Store.list
-    store = cf.store.list()
-    print(store)
+    # store = cf.store.list()
+    # print(store)
 
-    # # Store.create
-    # if cf.store.create("my_kv"):
-    #     print("New namespace my_kv is created")
+    # Store.create
+    if cf.store.create("my_kv"):
+        print("New namespace my_kv is created")
 
     # Store.rename
     if cf.store.rename("my_kv", "my_new_kv"):
@@ -60,34 +60,30 @@ def main():
     # Store.get_id
     ns_id, ns1 = cf.store.get_ns("my_new_kv")
 
-    # print(ns1)
-    # keys = ns1.keys()
-    # print(keys)
-    # for key in keys:
-    #     print(ns1.read(key))
-    #     break
-    # if ns1.write("test", "this is a test value"):
-    #     wait_result(ns1.read, "test")
+    print(ns1)
+    print("Keys:", ns1.keys())
 
-    # nsmeta = ns1.Metadata("metaTest", "This is meta of test")
-    # if ns1.write("test2", "this is a test value 2", metadata=nsmeta):
-    #     wait_result(ns1.read, "test2")
+    if ns1.write("test", "this is a test value"):
+        wait_result(ns1.read, "test")
 
-    # bundle = ns1.NSBundler()
-    # bundle.add("k1", "hello", metadata=nsmeta, expiration_ttl=200)
-    # bundle.add("k2", "d29ybGQ=", metadata=nsmeta, base64=True)
-    # if ns1.bulk_write(bundle=bundle):
-    #     wait_result(ns1.read, "k1")
-    #     wait_result(ns1.read, "k2")
+    nsmeta = ns1.Metadata("metaTest", "This is meta of test")
+    if ns1.write("test2", "this is a test value 2", metadata=nsmeta):
+        wait_result(ns1.read, "test2")
 
-    # keys = ns1.keys()
-    # print(keys)
+    bundle = ns1.NSBundler()
+    bundle.add("test3", "this is a test value 3", metadata=nsmeta, expiration_ttl=200)
+    bundle.add("test4", "dGhpcyBpcyBhIHRlc3QgdmFsdWUgNA==", base64=True)
+    if ns1.bulk_write(bundle=bundle):
+        wait_result(ns1.read, "test3")
+        wait_result(ns1.read, "test4")
 
-    # if ns1.delete("test"):
-    #     print("Deteled test key from namespace")
+    print("Keys:", ns1.keys())
 
-    # if ns1.bulk_delete(["test2", "k1", "k2"]):
-    #     print("Deteled test2, k1 & k2 key from namespace")
+    if ns1.delete("test"):
+        print("Deteled test key from namespace")
+
+    if ns1.bulk_delete(["test2", "test3", "test4"]):
+        print("Deteled test2, test3 & test4 key from namespace")
 
     # # Worker.Metadata
     # metadata = cf.worker.Metadata()
@@ -155,8 +151,8 @@ def main():
     #     print(f"Worker script {worker_name} is deleted from cloudflare")
 
     # # Store.delete
-    # if cf.store.delete("my_new_kv"):
-    #     print("The namespace my_new_kv is deleted")
+    if cf.store.delete("my_new_kv"):
+        print("The namespace my_new_kv is deleted")
 
 
 if __name__ == "__main__":

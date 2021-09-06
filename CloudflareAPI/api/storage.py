@@ -40,10 +40,10 @@ class Storage(CFBase):
     def rename(self, old_namespace: str, new_namespace: str):
         old_namespace = old_namespace.upper()
         new_namespace = new_namespace.upper()
-        store_id, store = self.get_ns(old_namespace)
+        store_id, _ = self.get_ns(old_namespace)
         return self.request.put(store_id, json={"title": new_namespace})
 
     def delete(self, namespace: str):
         namespace = namespace.upper()
-        store_id = self.get_id(namespace)
+        store_id, _ = self.get_ns(namespace)
         return self.request.delete(store_id)

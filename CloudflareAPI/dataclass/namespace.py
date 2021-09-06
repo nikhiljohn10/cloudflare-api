@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 import json
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from CloudflareAPI.core import CFBase, Request
 
 
@@ -13,11 +13,27 @@ class Namespace(CFBase):
     supports_url_encoding: bool
 
     class Metadata:
-        def __init__(self, key: str, value: str) -> None:
+        def __init__(self, key: Union[str, "Namespace.NSKey"], value: str) -> None:
+            if not isinstance(key, str):
+                key = key.name
             self.data = {key.strip(): value}
 
         def __call__(self) -> Dict[str, str]:
             return (None, json.dumps(self.data), "application/json")
+
+    class NSKey:
+        def __init__(self, key: Dict[str, str]):
+            self.name = key["name"]
+            if "expiration" in key:
+                self.expiration = key["expiration"]
+            if "metadata" in key:
+                self.metadata = key["metadata"]
+
+        def __repr__(self) -> str:
+            return json.dumps(self.__dict__, indent=2)
+
+        def __str__(self) -> str:
+            return self.name
 
     class NSBundler:
         def __init__(self) -> None:
@@ -58,27 +74,31 @@ class Namespace(CFBase):
 
     def keys(
         self,
-        limit: int = 1000,
+        limit: Optional[int] = None,
         cursor: Optional[str] = None,
         prefix: Optional[str] = None,
     ) -> List[Dict[str, str]]:
         params = {"limit": limit, "cursor": cursor, "prefix": prefix}
         params = self.parse_params(params)
-        keys = self.request.get("keys", params=params)
-        keys = [key["name"] for key in keys]
+        data = self.request.get("keys", params=params)
+        keys = [self.NSKey(key) for key in data]
         return keys
 
-    def read(self, key: str) -> str:
+    def read(self, key: Union[str, NSKey]) -> str:
+        if not isinstance(key, str):
+            key = key.name
         return self.request.get(f"values/{key}")
 
     def write(
         self,
-        key: str,
+        key: Union[str, NSKey],
         value: str,
         metadata: Optional[Metadata] = None,
         expiration: Optional[str] = None,
         expiration_ttl: Optional[int] = None,
     ) -> bool:
+        if not isinstance(key, str):
+            key = key.name
         params = {"expiration": expiration, "expiration_ttl": expiration_ttl}
         params = self.parse_params(params)
         if metadata is None:
@@ -95,11 +115,18 @@ class Namespace(CFBase):
     def bulk_write(self, bundle: NSBundler) -> bool:
         return self.request.put("bulk", json=bundle.list)
 
-    def delete(self, key: str) -> bool:
+    def delete(self, key: Union[str, NSKey]) -> bool:
+        if not isinstance(key, str):
+            key = key.name
         return self.request.delete(f"values/{key}")
 
-    def bulk_delete(self, keys: List[str]) -> bool:
-        return self.request.delete("bulk", json=keys)
+    def bulk_delete(self, keys: List[Union[str, NSKey]]) -> bool:
+        keyList: List[str] = []
+        for key in keys:
+            if not isinstance(key, str):
+                keyList.append(key.name)
+            keyList.append(key)
+        return self.request.delete("bulk", json=keyList)
 
     def __repr__(self) -> str:
         return json.dumps(
