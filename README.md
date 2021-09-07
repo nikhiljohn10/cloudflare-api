@@ -33,17 +33,12 @@ cd cloudflare-api
 7. Create Token
 8. Copy the token and save it somewhere secret & secure.
 
-Create a `secret.py` in the root directory with following content and replace `API_TOKEN`'s value with the token obtained from Cloudflare Dashboard:
-```python
-API_TOKEN = "API_TOKEN"
-```
-
 Then run the following command in terminal:
 ```bash
 make test
 ```
 
-> *Note: The `secret.py` file is ignored by git*
+If it is running for first time, you will be asked to enter API Token. Paste the api token copied from Dashboard.
 
 ## Example
 
@@ -62,7 +57,7 @@ Copy the code below in to a new file `./cloudflare-app/__main__.py`.
 from CloudflareAPI import Cloudflare
 
 def main():
-  cf = Cloudflare("API_TOKEN")
+  cf = Cloudflare()
 
   print(cf.account.list())
   print(cf.user.details())
@@ -72,10 +67,13 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-Now replace `API_TOKEN` values with values obtained from Cloudflare Dashboard. You can now run the program using following command:
+
+You can now run the program using following command:
 ```
 poetry run python cloudflare-app
 ```
+
+If it is running for first time, you will be asked to enter API Token. Paste the api token copied from Dashboard. This will create `cf.ini` file in your current working directory for future reference of the api token.
 
 ## Default Permissions
 
@@ -99,6 +97,10 @@ poetry run python cloudflare-app
 - `get_id` - Return account id if only one account exists. Otherwise display all accounts availabe and exit.
 - `details` - Display details of an account
 - `rename`__*__ - Rename an existing account 
+
+  ### AccountData
+
+  ### AccountSettings
 
 ### User
 
@@ -131,12 +133,29 @@ poetry run python cloudflare-app
 ### Store(Workers KV)
 
 - `list` - List all existing Namespaces
-- `get_id` - Find the namespace id of the namespace
+- `get_ns` - Returns requested Namespace object
 - `create` - Create a new namespace
 - `rename` - Rename an existing namespace
 - `delete` - Delete an existing namespace
 
-**( * : Not accessable with default Worker Token )**
+  ### Namespace
+  
+  - `keys` - Display all the keys in the Namespace
+  - `read` - Read the value of given key in the Namespace
+  - `write` - Write given key-value pair to the Namespace
+  - `bulk_write` - Write given key-value pairs in bulk to the Namespace
+  - `delete` - Delete given key from the Namespace
+  - `bulk_delete` - Delete given keys in bulk from the Namespace
+
+    ### Metadata
+
+    ### NSKey
+
+    ### NSBundler
+
+    - `add` - Add key-value pair with metadata to bundler
+
+**( * : Not accessable with default Worker permissions )**
 
 ## Development
 

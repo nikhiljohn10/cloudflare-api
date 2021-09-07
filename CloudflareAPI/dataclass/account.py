@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from dataclasses import dataclass
+import json
 from typing import Optional
 
 
@@ -10,6 +11,9 @@ class AccountSettings:
     enforce_twofactor: bool
     access_approval_expiry: Optional[bool]
     use_account_custom_ns_by_default: bool
+
+    def __repr__(self) -> str:
+        return json.dumps(self, default=lambda o: o.__dict__, indent=2)
 
 
 @dataclass
@@ -22,3 +26,9 @@ class AccountData:
     @property
     def formated_created_on(self) -> datetime:
         return datetime.strptime(f"{self.created_on[:-1]}00", "%Y-%m-%dT%H:%M:%S.%f")
+
+    def __repr__(self):
+        return json.dumps(self, default=lambda o: o.__dict__, indent=2)
+
+    def __str__(self):
+        return f"{self.name}: {self.id}"

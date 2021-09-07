@@ -2,26 +2,7 @@
 
 import time
 import requests
-from json import dumps
-from typing import Any, Dict, List, Optional, Union
-
-
-def jsonPrint(
-    content: Any = {},
-    title: Optional[str] = None,
-) -> None:
-    if title is not None:
-        data = {title: content}
-    else:
-        data = content
-    try:
-        print(dumps(data, indent=2))
-    except TypeError:
-        print(data)
-        if "props" in data.keys():
-            print(dumps(data, default=lambda o: o.props(), sort_keys=True, indent=2))
-        else:
-            print(dumps(data, default=lambda o: o.__dict__, sort_keys=True, indent=2))
+from typing import Optional
 
 
 class Fetch:
@@ -39,3 +20,14 @@ class Fetch:
                 time.sleep(1)
         print(" [OK]")
         return response.text or None
+
+
+def wait_result(func, *args, **kargs):
+    while True:
+        try:
+            result = func(*args, **kargs)
+            return result
+        except:
+            print("\rWaiting for result...", end="")
+            time.sleep(0.1)
+            continue

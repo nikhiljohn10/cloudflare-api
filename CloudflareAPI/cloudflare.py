@@ -6,13 +6,11 @@ from CloudflareAPI.api import Account, Worker, Storage, User
 
 
 class Cloudflare(CFBase):
-    def __init__(
-        self, bare: bool = False
-    ) -> None:
+    def __init__(self, bare: bool = False) -> None:
         self.account = Account()
         self.user = User()
         if not bare:
-            # self.worker = self.get_worker()
+            self.worker = self.get_worker()
             self.store = self.get_store()
 
     def get_worker(self):

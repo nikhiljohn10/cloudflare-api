@@ -6,16 +6,14 @@ from CloudflareAPI.core import CFBase, Request
 
 
 class Cron(CFBase):
-    def __init__(self, request: Request, account_id: str) -> None:
-        self.req = request
-        self.base_path = f"/accounts/{account_id}/workers/scripts"
-        super().__init__()
+    def __init__(self, account_id: str) -> None:
+        self.account_id = account_id
+        base_path = f"/accounts/{self.account_id}/workers/scripts"
+        self.request = self.get_request(base_path)
 
     def update(self, worker: str, crons: List[str]) -> Any:
-        url = self.build_url(f"/{worker}/schedules")
         crons = [{"cron": cron} for cron in crons]
-        return self.req.put(url, json=crons)["schedules"]
+        return self.request.put(f"/{worker}/schedules", json=crons)["schedules"]
 
     def get(self, worker: str) -> Any:
-        url = self.build_url(f"/{worker}/schedules")
-        return self.req.get(url)["schedules"]
+        return self.request.get(f"/{worker}/schedules")["schedules"]

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
+from json import dumps as json_dumps
 from typing import List, Optional
 from CloudflareAPI.core import CFBase
 from CloudflareAPI.dataclass.account import AccountData, AccountSettings
 from CloudflareAPI.exceptions import CFError
-from CloudflareAPI.utils import jsonPrint
 
 
 class Account(CFBase):
@@ -27,27 +27,23 @@ class Account(CFBase):
             created_on=account["created_on"],
         )
 
-    def __get_list(self):
-        if self.__list is not None:
-            return self.__list
-        else:
-            return self.list()
-
     def list(
-        self, page: int = 1, per_page: int = 20, order: str = ""
+        self, page: int = 1, per_page: int = 20, order: str = "", formated: bool = False
     ) -> List[AccountData]:
         if order and (order != "asc" and order != "desc"):
             raise CFError("Invalid order parameter. Only 'asc' or 'desc' allowed.")
         params = {"page": page, "per_page": per_page, "order": order}
         params = self.parse_params(params)
         data = self.request.get(params=params)
-        self.__list = [self.__get_object(account) for account in data]
-        return self.__list
+        result = [self.__get_object(account) for account in data]
+        if formated:
+            return json_dumps(result, indent=2)
+        return result
 
     def get_id(self) -> str:
         if "id" in self.props() and self.id is not None:
             return self.id
-        alist = self.__get_list()
+        alist = self.list()
         if len(alist) == 1:
             self.id = alist[0].id
             return alist[0].id
@@ -59,10 +55,12 @@ class Account(CFBase):
             exit()
         raise CFError("No account found")
 
-    def details(self, minimal: bool = True):
+    def details(self, minimal: bool = True, formated: bool = False):
         account = self.request.get(self.id)
         if minimal and "legacy_flags" in account.keys():
             del account["legacy_flags"]
+        if formated:
+            return json_dumps(account, indent=2)
         return account
 
     # This method is not accessable due to default token permissions
