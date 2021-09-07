@@ -1,16 +1,37 @@
 #!/usr/bin/env python3
 
-from typing import Optional
+from typing import Dict
+from dataclasses import dataclass
+
+from .network import Request
+from .configuration import config
 
 
-class CFBase:
-    def __init__(self) -> None:
-        self.base_url = "https://api.cloudflare.com/client/v4"
+class MetaBase(type):
+    def __init__(cls, *args, **kwargs):
+        cls.__account_id = None
 
-    def build_url(self, path: Optional[str] = None) -> str:
-        base_path = "" if not hasattr(self, "base_path") else self.base_path
-        if path is None:
-            return f"{self.base_url}{base_path}"
-        if path.startswith("/"):
-            return f"{self.base_url}{base_path}{path}"
-        return f"{self.base_url}{base_path}/{path}"
+    @property
+    def account_id(cls) -> str:
+        return cls.__account_id
+
+    @account_id.setter
+    def account_id(cls, id: str) -> None:
+        cls.__account_id = id
+
+
+@dataclass
+class CFBase(metaclass=MetaBase):
+    def props(self) -> Dict[str, str]:
+        return self.__dict__
+
+    def get_request(self, path: str):
+        return Request(token=config.token(), path=path)
+
+    def parse_params(self, params: Dict[str, str]):
+        parsed = {}
+        if params is not None:
+            for key, value in params.items():
+                if value:
+                    parsed.update({key: value})
+        return parsed

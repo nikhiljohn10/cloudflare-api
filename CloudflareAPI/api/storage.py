@@ -1,36 +1,38 @@
 #!/usr/bin/env python3
 
-from typing import Any, Dict, Optional
-from CloudflareAPI.core import CFBase, Request
+from typing import Any, Dict, List, Optional
+from CloudflareAPI.core import CFBase
 from CloudflareAPI.exceptions import CFError
+from CloudflareAPI.dataclass.namespace import Namespace
 
 
 class Storage(CFBase):
-    def __init__(self, request: Request, account_id: str) -> None:
-        self.req = request
-        self.base_path = f"/accounts/{account_id}/storage/kv/namespaces"
-        super().__init__()
+    def __init__(self, account_id: str) -> None:
+        self.account_id = account_id
+        base_path = f"/accounts/{self.account_id}/storage/kv/namespaces"
+        self.request = self.get_request(base_path)
 
     def list(
-        self, detailed: bool = False, params: Optional[Dict[str, Any]] = None
+        self,
+        params: Optional[Dict[str, Any]] = None,
     ) -> Any:
-        url = self.build_url()
-        nslist: Any = self.req.get(url, params=params)
-        if not detailed:
-            nslist = {ns["title"]: ns["id"] for ns in nslist}
-        return nslist
+        params = self.parse_params(params)
+        stores = self.request.get(params=params)
+        stores = [Namespace(self.account_id, ns) for ns in stores]
+        self._stores = stores
+        return stores
 
-    def get_id(self, namespace: str):
+    def get_ns(self, namespace: str) -> Namespace:
         stores = self.list()
         namespace = namespace.upper()
-        if namespace in stores:
-            return stores[namespace]
+        for store in stores:
+            if namespace == store.title:
+                return store.id, store
         raise CFError("Namespace not found")
 
     def create(self, namespace: str) -> bool:
         namespace = namespace.upper()
-        url = self.build_url()
-        result = self.req.post(url, json=dict(title=namespace))
+        result = self.request.post(json=dict(title=namespace))
         if result["title"] == namespace:
             return result["id"]
         raise CFError("Unable to create namespace")
@@ -38,12 +40,10 @@ class Storage(CFBase):
     def rename(self, old_namespace: str, new_namespace: str):
         old_namespace = old_namespace.upper()
         new_namespace = new_namespace.upper()
-        store_id = self.get_id(old_namespace)
-        url = self.build_url(store_id)
-        return self.req.put(url, json={"title": new_namespace})
+        store_id, _ = self.get_ns(old_namespace)
+        return self.request.put(store_id, json={"title": new_namespace})
 
     def delete(self, namespace: str):
         namespace = namespace.upper()
-        store_id = self.get_id(namespace)
-        url = self.build_url(store_id)
-        return self.req.delete(url)
+        store_id, _ = self.get_ns(namespace)
+        return self.request.delete(store_id)

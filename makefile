@@ -31,7 +31,7 @@ test-dep: pip-install
 	@python3 -m pip install --upgrade requests > /dev/null 2>&1
 
 test: test-dep
-	@python3 tests/test.py
+	@clear && python3 tests/test.py
 
 test-git:
 	@ssh -T git@github.com || true

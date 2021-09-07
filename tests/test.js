@@ -17,12 +17,10 @@ async function handleScheduled(event) {
 async function handleRequest(request) {
   const { pathname } = new URL(request.url);
 
-  if (pathname.startsWith("/set")) {
-    return new Response(await MY_NEW_KV.put("test", "This is a test value set in MY_NEW_KV namespace"));
-  }
-
   if (pathname.startsWith("/kv")) {
-    return new Response(await MY_NEW_KV.get("test"));
+    const value = await MY_NEW_KV.get("test")
+    if (value) return new Response(value);
+    return new Response("No store value found.", { status: 404 });
   }
 
   if (pathname.startsWith("/var")) {

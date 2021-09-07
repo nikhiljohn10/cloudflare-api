@@ -7,10 +7,15 @@ class CFError(Exception):
 
 class APIError(CFError):
     def __init__(self, errors, *args, **kargs) -> None:
-        if len(errors) > 0:
-            self.code = errors[0]["code"]
-            self.message = errors[0]["message"]
-            super().__init__(self.message, *args, **kargs)
+        if isinstance(errors, list):
+            for error in errors:
+                self.code = error["code"]
+                self.message = error["message"]
+                super().__init__(self.message, *args, **kargs)
+        elif isinstance(errors, dict):
+                self.code = errors["code"]
+                self.message = errors["error"]
+                super().__init__(self.message, *args, **kargs)
         else:
             raise CFError("Unknown internal error")
 
