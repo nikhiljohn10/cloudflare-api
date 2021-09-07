@@ -106,6 +106,8 @@ If it is running for first time, you will be asked to enter API Token. Paste the
 
 - `details` - Display details of the account's user
 
+  ### UserData
+
 ### Worker
 
 - `list` - List all existing workers

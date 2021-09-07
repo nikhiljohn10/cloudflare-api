@@ -28,7 +28,7 @@ class MyApp(Cloudflare):
         print("Account Details:", details)
 
         # User.details
-        print("User Details:", self.user.details(formated=True))
+        print("User Details:", self.user.details())
 
         # Worker.list
         workers = self.worker.list(formated=True)
