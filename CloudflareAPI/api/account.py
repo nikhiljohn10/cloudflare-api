@@ -8,10 +8,12 @@ from CloudflareAPI.exceptions import CFError
 
 
 class Account(CFBase):
-    def __init__(self) -> None:
-        self.__list: Optional[List[AccountData]] = None
+    def __init__(self, account_id: Optional[str] = None) -> None:
         self.request = self.get_request("accounts")
-        self.id = self.get_id()
+        if account_id is not None:
+            self.id = account_id
+        else:
+            self.id = self.get_id()
 
     def __get_object(self, account: AccountData):
         return AccountData(
@@ -28,17 +30,14 @@ class Account(CFBase):
         )
 
     def list(
-        self, page: int = 1, per_page: int = 20, order: str = "", formated: bool = False
+        self, page: int = 1, per_page: int = 20, order: str = ""
     ) -> List[AccountData]:
         if order and (order != "asc" and order != "desc"):
             raise CFError("Invalid order parameter. Only 'asc' or 'desc' allowed.")
         params = {"page": page, "per_page": per_page, "order": order}
         params = self.parse_params(params)
         data = self.request.get(params=params)
-        result = [self.__get_object(account) for account in data]
-        if formated:
-            return json_dumps(result, indent=2)
-        return result
+        return [self.__get_object(account) for account in data]
 
     def get_id(self) -> str:
         if "id" in self.props() and self.id is not None:
