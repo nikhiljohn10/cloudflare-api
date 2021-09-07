@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from CloudflareAPI.core import CFBase
 from CloudflareAPI.exceptions import CFError
 from CloudflareAPI.dataclass.namespace import Namespace
@@ -37,13 +37,13 @@ class Storage(CFBase):
             return Namespace(self.account_id, result)
         raise CFError("Unable to create namespace")
 
-    def rename(self, old_namespace: str, new_namespace: str):
+    def rename(self, old_namespace: str, new_namespace: str) -> bool:
         old_namespace = old_namespace.upper()
         new_namespace = new_namespace.upper()
         store = self.get_ns(old_namespace)
         return self.request.put(store.id, json={"title": new_namespace})
 
-    def delete(self, namespace: str):
+    def delete(self, namespace: str) -> bool:
         namespace = namespace.upper()
         store = self.get_ns(namespace)
         return self.request.delete(store.id)

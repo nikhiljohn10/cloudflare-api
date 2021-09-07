@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from json import dumps as json_dumps
-from typing import List, Optional
+from typing import Any, Dict, List, Optional, Union
 from CloudflareAPI.core import CFBase
 from CloudflareAPI.dataclass.account import AccountData, AccountSettings
 from CloudflareAPI.exceptions import CFError
@@ -15,7 +15,7 @@ class Account(CFBase):
         else:
             self.id = self.get_id()
 
-    def __get_object(self, account: AccountData):
+    def __get_object(self, account: Dict[str, Any]) -> AccountData:
         return AccountData(
             id=account["id"],
             name=account["name"],
@@ -54,16 +54,18 @@ class Account(CFBase):
             exit()
         raise CFError("No account found")
 
-    def details(self, minimal: bool = True, formated: bool = False):
+    def details(
+        self, minimal: bool = True, formated: bool = False
+    ) -> Union[str, AccountData]:
         account = self.request.get(self.id)
         if minimal and "legacy_flags" in account.keys():
             del account["legacy_flags"]
         if formated:
             return json_dumps(account, indent=2)
-        return account
+        return self.__get_object(account)
 
     # This method is not accessable due to default token permissions
-    def rename(self, account_id: str, name: str):
+    def rename(self, account_id: str, name: str) -> AccountData:
         url = self.build_url(account_id)
         account = self.request.put(url, json=dict(name=name))
-        return account
+        return self.__get_object(account)

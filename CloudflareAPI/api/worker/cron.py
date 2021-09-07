@@ -2,7 +2,7 @@
 
 
 from typing import Any, Dict, List
-from CloudflareAPI.core import CFBase, Request
+from CloudflareAPI.core import CFBase
 
 
 class Cron(CFBase):

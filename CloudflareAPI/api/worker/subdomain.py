@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from re import match
-from CloudflareAPI.core import CFBase, Request
+from CloudflareAPI.core import CFBase
 from CloudflareAPI.exceptions import CFError
 
 

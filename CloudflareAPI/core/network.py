@@ -19,12 +19,12 @@ class Request:
         self.session.headers.update({"Authorization": f"Bearer {token}"})
 
     @classmethod
-    def verify_token(cls):
+    def verify_token(cls) -> None:
         verification_url = f"{CLOUDFLARE_API_ROOT_URI}/user/tokens/verify"
         if cls.get(verification_url)["status"] != "active":
             raise CFError("Invalid api token")
 
-    def __del__(self):
+    def __del__(self) -> None:
         if "session" in self.__dict__ and self.session:
             self.session.close()
             self.session = None
@@ -48,7 +48,7 @@ class Request:
             return response.text
         return self.get_result(response)
 
-    def __fix_path(self, path):
+    def __fix_path(self, path: str) -> str:
         if path.startswith("https"):
             raise CFError("Invalid path")
         if not path.startswith("/"):
@@ -67,7 +67,7 @@ class Request:
         params: Optional[Any] = None,
         data: Optional[Any] = None,
         headers: Optional[Any] = None,
-    ):
+    ) -> Any:
         _res = self.session.get(
             self.url(url), params=params, data=data, headers=headers
         )
@@ -81,7 +81,7 @@ class Request:
         json: Optional[Any] = None,
         headers: Optional[Any] = None,
         files: Optional[Any] = None,
-    ):
+    ) -> Any:
         if json is not None:
             _res = self.session.post(
                 self.url(url), params=params, json=json, headers=headers, files=files
@@ -113,7 +113,7 @@ class Request:
         json: Optional[Any] = None,
         headers: Optional[Any] = None,
         files: Optional[Any] = None,
-    ):
+    ) -> Any:
         if json is not None:
             _res = self.session.put(
                 self.url(url), params=params, json=json, headers=headers, files=files
@@ -144,7 +144,7 @@ class Request:
         data: Optional[Any] = None,
         json: Optional[Any] = None,
         headers: Optional[Any] = None,
-    ):
+    ) -> Any:
         if json is not None:
             _res = self.session.delete(
                 self.url(url), params=params, json=json, headers=headers

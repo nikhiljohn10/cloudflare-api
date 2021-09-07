@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
 
-from dataclasses import dataclass
 import json
 from typing import Dict, List, Optional, Union
-from CloudflareAPI.core import CFBase, Request
+from CloudflareAPI.core import CFBase
 
 
 class Namespace(CFBase):
@@ -22,7 +21,7 @@ class Namespace(CFBase):
             return (None, json.dumps(self.data), "application/json")
 
     class NSKey:
-        def __init__(self, key: Dict[str, str]):
+        def __init__(self, key: Dict[str, str]) -> None:
             self.name = key["name"]
             if "expiration" in key:
                 self.expiration = key["expiration"]
@@ -47,7 +46,7 @@ class Namespace(CFBase):
             expiration_ttl: Optional[int] = None,
             metadata: Optional["Namespace.Metadata"] = None,
             base64: Optional[bool] = None,
-        ):
+        ) -> None:
             data = {
                 "key": key.strip(),
                 "value": value,

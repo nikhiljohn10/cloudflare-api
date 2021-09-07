@@ -2,11 +2,12 @@
 
 import time
 import requests
-from typing import Optional
+from typing import Any, Optional
 from CloudflareAPI.exceptions import APIError
 
+
 class Fetch:
-    def __init__(self, url: str):
+    def __init__(self, url: str) -> None:
         self.base_url = url
 
     def __call__(self, endpoint: str) -> Optional[str]:
@@ -22,7 +23,7 @@ class Fetch:
         return response.text or None
 
 
-def wait_result(func, *args, **kargs):
+def wait_result(func, *args, **kargs) -> Any:
     while True:
         try:
             result = func(*args, **kargs)

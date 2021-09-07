@@ -2,8 +2,8 @@
 
 from json import dumps as json_dumps
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
-from CloudflareAPI.core import CFBase, Request
+from typing import Any, Dict, List, Optional, Tuple, Union
+from CloudflareAPI.core import CFBase
 from CloudflareAPI.api.worker.cron import Cron
 from CloudflareAPI.api.worker.subdomain import Subdomain
 
@@ -13,13 +13,13 @@ class Worker(CFBase):
         def __init__(self) -> None:
             self.data = dict(body_part="script", bindings=[])
 
-        def __call__(self):
+        def __call__(self) -> Tuple[Any, str, str]:
             return (None, json_dumps(self.data), "application/json")
 
-        def _sanitize(self, text: str):
+        def _sanitize(self, text: str) -> str:
             return text.strip().replace(" ", "_").upper()
 
-        def add_binding(self, name: str, namespace_id: str):
+        def add_binding(self, name: str, namespace_id: str) -> None:
             binding = dict(
                 name=self._sanitize(name),
                 type="kv_namespace",
@@ -27,11 +27,11 @@ class Worker(CFBase):
             )
             self.data["bindings"].append(binding)
 
-        def add_variable(self, name: str, text: str):
+        def add_variable(self, name: str, text: str) -> None:
             binding = dict(name=self._sanitize(name), type="plain_text", text=text)
             self.data["bindings"].append(binding)
 
-        def add_secret(self, name: str, secret: str):
+        def add_secret(self, name: str, secret: str) -> None:
             binding = dict(name=self._sanitize(name), type="secret_text", text=secret)
             self.data["bindings"].append(binding)
 
@@ -50,7 +50,7 @@ class Worker(CFBase):
         detailed: bool = False,
         params: Optional[Dict[str, Any]] = None,
         formated: bool = False,
-    ) -> List:
+    ) -> Union[List[str], str]:
         workers = self.request.get(params=params)
         if detailed:
             wlist = [
