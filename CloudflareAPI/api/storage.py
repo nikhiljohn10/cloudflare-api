@@ -30,11 +30,11 @@ class Storage(CFBase):
                 return store
         raise CFError("Namespace not found")
 
-    def create(self, namespace: str) -> bool:
+    def create(self, namespace: str) -> Namespace:
         namespace = namespace.upper()
         result = self.request.post(json=dict(title=namespace))
         if result["title"] == namespace:
-            return result["id"]
+            return Namespace(self.account_id, result)
         raise CFError("Unable to create namespace")
 
     def rename(self, old_namespace: str, new_namespace: str):
