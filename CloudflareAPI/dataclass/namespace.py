@@ -59,9 +59,9 @@ class Namespace(CFBase):
                 "expiration_ttl": expiration_ttl,
                 "base64": base64,
             }
-            for key, value in params.items():
-                if params[key] is not None:
-                    data.update({key: value})
+            for pkey, pvalue in params.items():
+                if params[pkey] is not None:
+                    data.update({pkey: pvalue})
             self.list.append(data)
 
     def __init__(self, account_id, data) -> None:

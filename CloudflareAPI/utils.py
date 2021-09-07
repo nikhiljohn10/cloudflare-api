@@ -3,7 +3,7 @@
 import time
 import requests
 from typing import Optional
-
+from CloudflareAPI.exceptions import APIError
 
 class Fetch:
     def __init__(self, url: str):
@@ -27,7 +27,7 @@ def wait_result(func, *args, **kargs):
         try:
             result = func(*args, **kargs)
             return result
-        except:
+        except APIError:
             print("\rWaiting for result...", end="")
             time.sleep(0.1)
             continue

@@ -41,7 +41,7 @@ class Request:
             keys = data.keys()
             if "errors" in keys and data["errors"]:
                 raise APIError(data["errors"])
-            elif "error" in keys and data["error"]:
+            if "error" in keys and data["error"]:
                 raise APIError(data)
             raise CFError("Unkown error")
         if "json" not in response.headers["content-type"]:
@@ -59,8 +59,7 @@ class Request:
         url = self.base_url
         if path is None or not path:
             return url
-        else:
-            return url + self.__fix_path(path)
+        return url + self.__fix_path(path)
 
     def get(
         self,

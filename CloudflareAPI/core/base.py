@@ -7,21 +7,8 @@ from .network import Request
 from .configuration import config
 
 
-class MetaBase(type):
-    def __init__(cls, *args, **kwargs):
-        cls.__account_id = None
-
-    @property
-    def account_id(cls) -> str:
-        return cls.__account_id
-
-    @account_id.setter
-    def account_id(cls, id: str) -> None:
-        cls.__account_id = id
-
-
 @dataclass
-class CFBase(metaclass=MetaBase):
+class CFBase:
     def props(self) -> Dict[str, str]:
         return self.__dict__
 
