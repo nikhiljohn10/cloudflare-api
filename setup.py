@@ -14,28 +14,28 @@ def main():
     version = re.compile(r"#v(.+)").search(version_file).group(1)
 
     setup(
-        name='cloudflare-api',
+        name="cloudflare-api",
         version=version,
-        description='Python client for the Cloudflare v4 API',
+        description="Python client for the Cloudflare v4 API",
         long_description=README,
         long_description_content_type="text/markdown",
-        author='Nikhil John',
-        author_email='nikhiljohn1010@gmail.com',
-        url='https://github.com/nikhiljohn10/cloudflare-api',
-        license='MIT',
+        author="Nikhil John",
+        author_email="nikhiljohn1010@gmail.com",
+        url="https://github.com/nikhiljohn10/cloudflare-api",
+        license="MIT",
         packages=find_packages(),
-        install_requires=['requests'],
-        keywords='cloudflare-api',
+        install_requires=["requests"],
+        keywords="cloudflare-api",
         classifiers=[
-            'Development Status :: 4 - Beta',
-            'Intended Audience :: Developers',
-            'Topic :: Software Development :: Libraries :: Python Modules',
-            'License :: OSI Approved :: MIT License',
-            'Programming Language :: Python :: 3',
-            'Programming Language :: Python :: 3.9'
-        ]
+            "Development Status :: 5 - Production/Stable",
+            "Intended Audience :: Developers",
+            "Topic :: Software Development :: Libraries :: Python Modules",
+            "License :: OSI Approved :: MIT License",
+            "Programming Language :: Python :: 3",
+            "Programming Language :: Python :: 3.9",
+        ],
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
