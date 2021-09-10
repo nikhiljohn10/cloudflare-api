@@ -12,8 +12,11 @@ class CFBase:
     def props(self) -> Dict[str, str]:
         return self.__dict__
 
+    def store_token(self, token: str) -> None:
+        config.token = token
+
     def get_request(self, path: str) -> Request:
-        return Request(token=config.token(), path=path)
+        return Request(token=config.token, path=path)
 
     def parse_params(self, params: Dict[str, str]) -> Dict[str, str]:
         parsed = {}

@@ -6,21 +6,22 @@ from typing import Any, Dict, Optional, Union
 from requests.models import Response
 from CloudflareAPI.exceptions import CFError, APIError
 
-CLOUDFLARE_API_ROOT_URI = "https://api.cloudflare.com/client/v4"
 
 
 class Request:
+    API_ROOT = "https://api.cloudflare.com/client/v4"
+
     def __init__(self, token: str, path: str = "") -> None:
         if not token:
             raise CFError("Invalid api token")
         path = self.__fix_path(path)
-        self.base_url = f"{CLOUDFLARE_API_ROOT_URI}{path}"
+        self.base_url = f"{self.API_ROOT}{path}"
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {token}"})
 
     @classmethod
     def verify_token(cls) -> None:
-        verification_url = f"{CLOUDFLARE_API_ROOT_URI}/user/tokens/verify"
+        verification_url = f"{cls.API_ROOT}/user/tokens/verify"
         if cls.get(verification_url)["status"] != "active":
             raise CFError("Invalid api token")
 
