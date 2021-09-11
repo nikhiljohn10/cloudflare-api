@@ -19,12 +19,6 @@ class Request:
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {token}"})
 
-    @classmethod
-    def verify_token(cls) -> None:
-        verification_url = f"{cls.API_ROOT}/user/tokens/verify"
-        if cls.get(verification_url)["status"] != "active":
-            raise CFError("Invalid api token")
-
     def __del__(self) -> None:
         if "session" in self.__dict__ and self.session:
             self.session.close()

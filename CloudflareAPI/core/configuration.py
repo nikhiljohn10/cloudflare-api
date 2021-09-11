@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from pathlib import Path
 from getpass import getpass
 from configparser import ConfigParser
@@ -5,11 +7,13 @@ from typing import Optional
 
 
 class Config:
-    DEFAULT_CONFIG_FILE = "cf.ini"
-    ROOT_DIR = Path(__file__).parent.parent.parent
+    CONFIG_FILE = "cf-config.ini"
+    ROOT_DIR = Path(".").parent.parent.parent
 
-    def __init__(self) -> None:
-        self.__file = (self.ROOT_DIR / self.DEFAULT_CONFIG_FILE).resolve()
+    def __init__(self, file: Optional[str] = None) -> None:
+        if file is not None:
+            self.CONFIG_FILE = file
+        self.__file = (self.ROOT_DIR / self.CONFIG_FILE).resolve()
         self.__config = ConfigParser()
         self.__token: Optional[str] = None
 
@@ -19,7 +23,7 @@ class Config:
             if "Cloudflare" in self.__config:
                 if "token" in self.__config["Cloudflare"]:
                     return self.__config["Cloudflare"]["token"]
-            self.__token = self.read_from_user()
+            self.read_from_user()
         return self.__token
 
     def __write_token(self, token: str) -> None:
@@ -32,7 +36,6 @@ class Config:
         token = getpass("Please enter Cloudflare API Token: ")
         self.__write_token(token)
         print("Successfully stored api key")
-        return token
 
     @property
     def token(self) -> str:
@@ -41,5 +44,3 @@ class Config:
     @token.setter
     def token(self, value: str) -> None:
         self.__write_token(value)
-
-config = Config()

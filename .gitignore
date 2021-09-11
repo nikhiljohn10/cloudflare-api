@@ -130,4 +130,4 @@ dmypy.json
 
 .vscode/
 workers/
-cf.ini
+cf-config.ini

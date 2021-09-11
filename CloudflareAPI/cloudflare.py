@@ -6,9 +6,13 @@ from CloudflareAPI.api import Account, Worker, Storage, User
 
 
 class Cloudflare(CFBase):
-    def __init__(self, token: Optional[str] = None, account_id: Optional[str] = None, bare: bool = False) -> None:
-        if token is not None:
-            self.store_token(token)
+    def __init__(
+        self,
+        token: Optional[str] = None,
+        account_id: Optional[str] = None,
+        bare: bool = False,
+    ) -> None:
+        self.validate(token)
         self.account = Account(account_id)
         self.user = User()
         if not bare:
