@@ -5,38 +5,36 @@ version:
 	@echo "cloudflare-api v$(CURRENT_VERSION)"
 
 clean:
-	@rm -rf dist/ workers/ build/ cloudflare_api.egg-info/
+	@rm -rf dist/ downloads/ build/ *.egg-info/
 	@find . -type d -name *pycache* -exec rm -rf {} +
+
+init:
+	@python3 -m venv venv
 
 check: 
 	@twine check dist/*
 
 pip-install:
 	@python3 -m pip install --upgrade pip > /dev/null 2>&1
-	@pip3 install setuptools wheel > /dev/null 2>&1
+	@python3 -m pip install setuptools wheel > /dev/null 2>&1
 
 install: pip-install
-	@pip3 install -Ur requirement.txt
+	@python3 -m pip install -Ur requirement.txt
 
-build: clean
+build: clean install
 	@python3 setup.py sdist bdist_wheel
 
-publish-test: check
-	@twine upload -r testpypi dist/*
+local: build
+	@-pip3 uninstall -y cloudflare_api
+	@pip3 install ./dist/cloudflare-api-$(CURRENT_VERSION).tar.gz
 
 publish: check
 	@twine upload dist/*
 
-test-dep: pip-install
-	@python3 -m pip install --upgrade requests > /dev/null 2>&1
+test: local
+	@clear && python examples/advanced.py
 
-test: test-dep
-	@clear && python3 tests/test.py
-
-test-git:
-	@ssh -T git@github.com || true
-
-bump: test-git
+bump:
 ifeq ($(VERSION),)
 	@echo "Error: Require VERSION variable to be set."
 else ifeq ($(VERSION),$(CURRENT_VERSION))
@@ -50,4 +48,4 @@ else
 	@git push --follow-tags
 endif
 
-.PHONY: install build pip-install check clean upload-test upload test test-dep version bump test-git
+.PHONY: version clean init check pip-install install build local publish test bump
