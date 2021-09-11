@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 import requests
+from requests.models import Response
 from typing import Any, Dict, Optional, Union
 
-from requests.models import Response
-from CloudflareAPI.exceptions import CFError, APIError
-
+from ..exceptions import CFError, APIError
 
 
 class Request:

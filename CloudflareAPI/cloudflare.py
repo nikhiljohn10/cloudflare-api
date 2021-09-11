@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 from typing import Optional
-from CloudflareAPI.core import CFBase
-from CloudflareAPI.api import Account, Worker, Storage, User
+
+from .core import CFBase
+from .api import Account, Worker, Storage, User
 
 
 class Cloudflare(CFBase):

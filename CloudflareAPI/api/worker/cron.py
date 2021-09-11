@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-
 from typing import Any, Dict, List
-from CloudflareAPI.core import CFBase
+
+from ...core import CFBase
 
 
 class Cron(CFBase):

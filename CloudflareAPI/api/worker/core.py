@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-from json import dumps as json_dumps
 from pathlib import Path
+from json import dumps as json_dumps
 from typing import Any, Dict, List, Optional, Tuple, Union
-from CloudflareAPI.core import CFBase
-from CloudflareAPI.api.worker.cron import Cron
-from CloudflareAPI.api.worker.subdomain import Subdomain
+
+from ...core import CFBase
+from .cron import Cron
+from .subdomain import Subdomain
 
 
 class Worker(CFBase):

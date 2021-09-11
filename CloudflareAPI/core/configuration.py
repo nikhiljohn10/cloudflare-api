@@ -2,8 +2,8 @@
 
 from pathlib import Path
 from getpass import getpass
-from configparser import ConfigParser
 from typing import Optional
+from configparser import ConfigParser
 
 
 class Config:

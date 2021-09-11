@@ -3,7 +3,8 @@
 
 import json
 from typing import Dict, List, Optional, Union
-from CloudflareAPI.core import CFBase
+
+from ..core import CFBase
 
 
 class Namespace(CFBase):

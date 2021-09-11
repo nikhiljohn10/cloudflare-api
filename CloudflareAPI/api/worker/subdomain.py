@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 from re import match
-from CloudflareAPI.core import CFBase
-from CloudflareAPI.exceptions import CFError
+
+from ...core import CFBase
+from ...exceptions import CFError
 
 
 class Subdomain(CFBase):
