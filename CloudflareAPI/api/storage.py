@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 from typing import Any, Dict, Optional
-from CloudflareAPI.core import CFBase
-from CloudflareAPI.exceptions import CFError
-from CloudflareAPI.dataclass.namespace import Namespace
+
+from ..core import CFBase
+from ..exceptions import CFError
+from ..dataclass.namespace import Namespace
 
 
 class Storage(CFBase):

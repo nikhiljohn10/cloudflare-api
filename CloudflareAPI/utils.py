@@ -3,7 +3,8 @@
 import time
 import requests
 from typing import Any, Optional
-from CloudflareAPI.exceptions import APIError
+
+from .exceptions import APIError
 
 
 class Fetch:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from CloudflareAPI.core import CFBase
-from CloudflareAPI.dataclass.user import UserData
+from ..core import CFBase
+from ..dataclass.user import UserData
 
 
 class User(CFBase):

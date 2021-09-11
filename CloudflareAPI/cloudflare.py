@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 
 from typing import Optional
-from CloudflareAPI.core import CFBase
-from CloudflareAPI.api import Account, Worker, Storage, User
+
+from .core import CFBase
+from .api import Account, Worker, Storage, User
 
 
 class Cloudflare(CFBase):
-    def __init__(self, bare: bool = False, account_id: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        token: Optional[str] = None,
+        account_id: Optional[str] = None,
+        bare: bool = False,
+    ) -> None:
+        self.validate(token)
         self.account = Account(account_id)
         self.user = User()
         if not bare:

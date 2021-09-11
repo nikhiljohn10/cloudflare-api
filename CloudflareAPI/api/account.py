@@ -2,9 +2,10 @@
 
 from json import dumps as json_dumps
 from typing import Any, Dict, List, Optional, Union
-from CloudflareAPI.core import CFBase
-from CloudflareAPI.dataclass.account import AccountData, AccountSettings
-from CloudflareAPI.exceptions import CFError
+
+from ..core import CFBase
+from ..dataclass.account import AccountData, AccountSettings
+from ..exceptions import CFError
 
 
 class Account(CFBase):

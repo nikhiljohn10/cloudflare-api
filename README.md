@@ -35,6 +35,8 @@ cd cloudflare-api
 
 Then run the following command in terminal:
 ```bash
+make init
+. venv/bin/activate
 make test
 ```
 
@@ -44,13 +46,13 @@ If it is running for first time, you will be asked to enter API Token. Paste the
 
 For this example, `poetry` is used for easy setup.
 ```bash
-python3 -m pip install poetry
-poetry new cloudflare-app
-cd cloudflare-app
+python3 -m pip install --user poetry
+mkdir -p myapp && cd myapp
+poetry init -n
 poetry add cloudflare-api
 ```
 
-Copy the code below in to a new file `./cloudflare-app/__main__.py`.
+Copy the code below in to a new file `./myapp/app.py`.
 ```python
 #!/usr/bin/env python3
 
@@ -69,11 +71,13 @@ if __name__ == "__main__":
 ```
 
 You can now run the program using following command:
-```
-poetry run python cloudflare-app
+```bash
+poetry run python app.py
 ```
 
-If it is running for first time, you will be asked to enter API Token. Paste the api token copied from Dashboard. This will create `cf.ini` file in your current working directory for future reference of the api token.
+If it is running for first time, you will be asked to enter API Token. Paste the api token copied from Dashboard. This will create `cf-config.ini` file in your current working directory for future reference of the api token.
+
+You can find more examples in [`examples`](https://github.com/nikhiljohn10/cloudflare-api/tree/main/examples) directory
 
 ## Default Permissions
 
