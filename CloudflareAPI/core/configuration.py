@@ -35,7 +35,6 @@ class Config:
     def read_from_user(self) -> None:
         token = getpass("Please enter Cloudflare API Token: ")
         self.__write_token(token)
-        print("Successfully stored api key")
 
     @property
     def token(self) -> str:

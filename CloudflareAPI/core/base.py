@@ -26,8 +26,9 @@ class CFBase:
         if token is not None:
             config.token = token
         while not self.verify_token(config.token):
-            print("Error: Invalid API Token", end="\n\n")
+            print("Error: Invalid API Token")
             config.read_from_user()
+        print("Valid API Token found")
 
     def props(self) -> Dict[str, str]:
         return self.__dict__
