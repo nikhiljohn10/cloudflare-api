@@ -1,5 +1,5 @@
 VERSION_FILE := $(shell pwd)/CloudflareAPI/__version__.py
-CURRENT_VERSION := $(subst \#v,,$(shell cat $(VERSION_FILE)))
+CURRENT_VERSION := $(subst #v,,$(shell cat $(VERSION_FILE)))
 
 version:
 	@echo "cloudflare-api v$(CURRENT_VERSION)"
